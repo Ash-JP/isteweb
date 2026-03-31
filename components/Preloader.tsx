@@ -40,7 +40,6 @@ export default function Preloader() {
     };
 
     const handleVideoError = () => {
-        console.log("Video failed to load, falling back to animation");
         setVideoError(true);
         // If switching to animation fallback, execute it for 2.5s then close
         setTimeout(() => {

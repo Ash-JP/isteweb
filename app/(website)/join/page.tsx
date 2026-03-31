@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle, Users, Award, Calendar, ArrowRight, Sparkles } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Join Us",
+  description: "Become an ISTE CEAL member and unlock exclusive networking, workshops, and technical events.",
+};
 
 export default function JoinPage() {
   const benefits = [

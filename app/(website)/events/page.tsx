@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import { client } from "@/sanity/client";
 import FeaturedEvent from "@/components/FeaturedEvent";
 import CurvedTimeline from "@/components/CurvedTimeline";
+
+export const metadata: Metadata = {
+  title: 'Events',
+  description: 'Explore our history of workshops, hackathons, seminars, and tech events.',
+};
 
 async function getEvents() {
   const query = `*[_type == "event"] | order(date desc) {

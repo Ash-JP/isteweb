@@ -1,10 +1,15 @@
-
+import type { Metadata } from "next";
 import Hero from "@/components/Hero";
 import AboutSection from "@/components/AboutSection";
 import WhatWeOfferSection from "@/components/WhatWeOfferSection";
 import UpcomingEventsSection from "@/components/UpcomingEventsSection";
 import FinalCTASection from "@/components/FinalCTASection";
 import { client } from "@/sanity/client";
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Discover ISTE CEAL, connecting students with opportunities in technology, engineering, and innovation.",
+};
 
 async function getCountdownEvent() {
   // Query the homepage singleton first

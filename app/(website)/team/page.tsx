@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import { client } from "@/sanity/client";
 import TeamPresenter from "@/components/TeamPresenter";
 import { Users, Award, Target, Sparkles } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: 'Our Team',
+  description: 'Meet the passionate individuals driving innovation and excellence at ISTE CEAL.',
+};
 
 async function getTeam() {
   const query = `*[_type == "execom"] {

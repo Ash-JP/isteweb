@@ -18,7 +18,6 @@ export default function VideoIntro() {
     // Play video when component mounts
     if (videoRef.current) {
       videoRef.current.play().catch(err => {
-        console.log('Autoplay prevented:', err);
         // If autoplay is blocked, skip video
         handleVideoEnd();
       });
