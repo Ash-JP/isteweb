@@ -16,6 +16,7 @@ interface UpcomingEventsSectionProps {
 export default function UpcomingEventsSection({ event }: UpcomingEventsSectionProps) {
     const [isVisible, setIsVisible] = useState(false);
     const sectionRef = useRef<HTMLElement>(null);
+    const [isPast, setIsPast] = useState(false);
     const [timeLeft, setTimeLeft] = useState({
         days: 0,
         hours: 0,
@@ -39,11 +40,12 @@ export default function UpcomingEventsSection({ event }: UpcomingEventsSectionPr
 
         // Timer Logic
         const calculateTimeLeft = () => {
-            if (!event?.date) return;
+            if (!event?.date) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
 
             const difference = +new Date(event.date) - +new Date();
 
             if (difference > 0) {
+                setIsPast(false);
                 return {
                     days: Math.floor(difference / (1000 * 60 * 60 * 24)),
                     hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
@@ -51,16 +53,16 @@ export default function UpcomingEventsSection({ event }: UpcomingEventsSectionPr
                     seconds: Math.floor((difference / 1000) % 60),
                 };
             }
+            // Event date is in the past
+            setIsPast(true);
             return { days: 0, hours: 0, minutes: 0, seconds: 0 };
         };
 
         // Initial set
-        const timerInit = calculateTimeLeft();
-        if (timerInit) setTimeLeft(timerInit);
+        setTimeLeft(calculateTimeLeft());
 
         const timer = setInterval(() => {
-            const tl = calculateTimeLeft();
-            if (tl) setTimeLeft(tl);
+            setTimeLeft(calculateTimeLeft());
         }, 1000);
 
         return () => {
@@ -163,23 +165,29 @@ export default function UpcomingEventsSection({ event }: UpcomingEventsSectionPr
 
                                 {/* Right Side: Countdown */}
                                 <div className="flex-shrink-0 w-full md:w-auto">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        {[
-                                            { value: timeLeft.days, label: 'Days' },
-                                            { value: timeLeft.hours, label: 'Hours' },
-                                            { value: timeLeft.minutes, label: 'Mins' },
-                                            { value: timeLeft.seconds, label: 'Secs' },
-                                        ].map((item, index) => (
-                                            <div key={index} className="bg-gray-800/50 border border-white/5 rounded-2xl p-6 w-32 md:w-40 text-center backdrop-blur-sm group/timer hover:border-sky-500/30 transition-colors">
-                                                <div className="text-4xl md:text-5xl font-mono font-bold text-white mb-2 group-hover/timer:text-sky-400 transition-colors">
-                                                    {String(item.value).padStart(2, '0')}
+                                    {isPast ? (
+                                        <div className="flex items-center justify-center w-full md:w-80 h-32 rounded-2xl border border-white/10 bg-gray-800/40 backdrop-blur-sm">
+                                            <p className="text-gray-400 text-lg font-semibold tracking-wide">Event has ended</p>
+                                        </div>
+                                    ) : (
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {[
+                                                { value: timeLeft.days, label: 'Days' },
+                                                { value: timeLeft.hours, label: 'Hours' },
+                                                { value: timeLeft.minutes, label: 'Mins' },
+                                                { value: timeLeft.seconds, label: 'Secs' },
+                                            ].map((item, index) => (
+                                                <div key={index} className="bg-gray-800/50 border border-white/5 rounded-2xl p-6 w-32 md:w-40 text-center backdrop-blur-sm group/timer hover:border-sky-500/30 transition-colors">
+                                                    <div className="text-4xl md:text-5xl font-mono font-bold text-white mb-2 group-hover/timer:text-sky-400 transition-colors">
+                                                        {String(item.value).padStart(2, '0')}
+                                                    </div>
+                                                    <div className="text-xs text-gray-500 uppercase tracking-widest font-medium">
+                                                        {item.label}
+                                                    </div>
                                                 </div>
-                                                <div className="text-xs text-gray-500 uppercase tracking-widest font-medium">
-                                                    {item.label}
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

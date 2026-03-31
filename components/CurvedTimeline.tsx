@@ -12,17 +12,21 @@ export default function CurvedTimeline({ events }: CurvedTimelineProps) {
     const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    const eventsByYear = events.reduce((acc: any, event: any) => {
-        const year = event.year || new Date(event.date).getFullYear().toString();
-        if (!acc[year]) acc[year] = [];
-        acc[year].push(event);
-        return acc;
-    }, {});
+    // Sort ALL events by exact date ascending: oldest on the left, latest on the right
+    const allEventsFlat = [...events]
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+        .map(e => ({ ...e, _year: (e.year || new Date(e.date).getFullYear().toString()) }));
 
-    const sortedYears = Object.keys(eventsByYear).sort((a, b) => parseInt(b) - parseInt(a));
-    const allEventsFlat = sortedYears.flatMap(year =>
-        eventsByYear[year].map((e: any) => ({ ...e, year }))
-    );
+    // Build year groups from the sorted flat list for the mobile view
+    const eventsByYear: Record<string, any[]> = {};
+    const sortedYears: string[] = [];
+    allEventsFlat.forEach(event => {
+        if (!eventsByYear[event._year]) {
+            eventsByYear[event._year] = [];
+            sortedYears.push(event._year);
+        }
+        eventsByYear[event._year].push(event);
+    });
 
     // SVG Logic for Horizontal Sine Wave
     const eventWidth = 360;
@@ -186,9 +190,9 @@ export default function CurvedTimeline({ events }: CurvedTimelineProps) {
                                     >
                                         <div className="relative w-0 h-full">
                                             {/* Year Marker */}
-                                            {(index === 0 || allEventsFlat[index - 1].year !== event.year) && (
+                                            {(index === 0 || allEventsFlat[index - 1]._year !== event._year) && (
                                                 <div className="absolute top-[calc(50%-15px)] -left-12 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-bold text-gray-400 backdrop-blur-md whitespace-nowrap z-20">
-                                                    {event.year}
+                                                    {event._year}
                                                 </div>
                                             )}
 

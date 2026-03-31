@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, MapPin, ArrowRight, Clock } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { urlFor } from "@/sanity/client";
 import { useEffect } from "react";
@@ -49,7 +48,7 @@ export default function TimelineModal({ event, isOpen, onClose }: TimelineModalP
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-4xl bg-[#0B1120] border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]"
+                        className="relative w-full max-w-3xl bg-[#0B1120] border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
                     >
                         {/* Close Button */}
                         <button
@@ -59,22 +58,21 @@ export default function TimelineModal({ event, isOpen, onClose }: TimelineModalP
                             <X className="w-5 h-5" />
                         </button>
 
-                        {/* Image Section */}
-                        <div className="relative w-full md:w-2/5 h-64 md:h-auto">
-                            {event.image ? (
-                                <Image
+                        {/* Image Section — natural aspect ratio, no cropping */}
+                        {event.image ? (
+                            <div className="w-full bg-black/30 flex items-center justify-center overflow-hidden max-h-[50vh]">
+                                <img
                                     src={urlFor(event.image).url()}
                                     alt={event.title}
-                                    fill
-                                    className="object-cover"
+                                    className="w-full h-auto max-h-[50vh] object-contain"
+                                    style={{ display: 'block' }}
                                 />
-                            ) : (
-                                <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                                    <Calendar className="w-16 h-16 text-gray-600" />
-                                </div>
-                            )}
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#0B1120]" />
-                        </div>
+                            </div>
+                        ) : (
+                            <div className="w-full h-48 bg-gray-800 flex items-center justify-center">
+                                <Calendar className="w-16 h-16 text-gray-600" />
+                            </div>
+                        )}
 
                         {/* Content Section */}
                         <div className="flex-1 p-8 overflow-y-auto custom-scrollbar">
