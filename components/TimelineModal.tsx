@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, MapPin, ArrowRight, Clock } from "lucide-react";
 import Link from "next/link";
-import { urlFor } from "@/sanity/client";
+
 import { useEffect } from "react";
 
 interface TimelineModalProps {
@@ -59,10 +59,10 @@ export default function TimelineModal({ event, isOpen, onClose }: TimelineModalP
                         </button>
 
                         {/* Image Section — natural aspect ratio, no cropping */}
-                        {event.image ? (
+                        {event.cloudinaryUrl ? (
                             <div className="w-full bg-black/30 flex items-center justify-center overflow-hidden max-h-[50vh]">
                                 <img
-                                    src={urlFor(event.image).url()}
+                                    src={event.cloudinaryUrl}
                                     alt={event.title}
                                     className="w-full h-auto max-h-[50vh] object-contain"
                                     style={{ display: 'block' }}

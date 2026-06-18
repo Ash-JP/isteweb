@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useAnimation, PanInfo, useMotionValue, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
-import { urlFor } from "@/sanity/client";
+
 import { Linkedin, Instagram, Mail, Github, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Member {
@@ -11,7 +11,9 @@ interface Member {
     name: string;
     role: string;
     year: string;
-    image: any;
+
+    cloudinaryUrl?: string | null;
+    customRole?: string | null;
     linkedin?: string;
     instagram?: string;
     email?: string;
@@ -57,7 +59,12 @@ export default function HorizontalCarousel({ members }: { members: Member[] }) {
         }
     };
 
-    const formatRole = (role: string) => role.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    const formatRole = (role: string, customRole?: string | null) => {
+        if (role === 'other' && customRole) {
+            return customRole;
+        }
+        return role.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    };
 
     return (
         <div
@@ -116,8 +123,8 @@ export default function HorizontalCarousel({ members }: { members: Member[] }) {
 
                                     {/* Large Rectangular Image */}
                                     <div className="relative w-full h-64 mb-4 rounded-2xl overflow-hidden shadow-md bg-gray-100">
-                                        {member.image ? (
-                                            <Image src={urlFor(member.image).url()} alt={member.name} fill className="object-cover" />
+                                        {member.cloudinaryUrl ? (
+                                            <Image src={member.cloudinaryUrl} alt={member.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center text-4xl text-gray-300 font-bold">{member.name.charAt(0)}</div>
                                         )}
@@ -126,7 +133,7 @@ export default function HorizontalCarousel({ members }: { members: Member[] }) {
                                     {/* Content */}
                                     <div className="text-center w-full relative z-10 flex-1 flex flex-col">
                                         <div className="inline-block px-3 py-1 mb-2 rounded-full bg-sky-50 text-sky-600 text-[11px] font-bold uppercase tracking-wider mx-auto">
-                                            {formatRole(member.role)}
+                                            {formatRole(member.role, member.customRole)}
                                         </div>
 
                                         <h3 className="text-2xl font-bold text-gray-900 mb-1 leading-tight">

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { urlFor } from "@/sanity/client";
+
 import { Calendar, ArrowRight } from "lucide-react";
 
 interface Event {
@@ -11,8 +11,7 @@ interface Event {
   title: string;
   slug: { current: string };
   year: string;
-  date: string;
-  image: any;
+  date: string;    cloudinaryUrl?: string | null;
   description: string;
 }
 
@@ -55,11 +54,12 @@ export default function EventsFeed({ events }: { events: Event[] }) {
           >
             {/* Event Image */}
             <div className="relative h-56 w-full bg-gray-100 overflow-hidden">
-              {event.image ? (
+              {event.cloudinaryUrl ? (
                 <Image
-                  src={urlFor(event.image).url()}
+                  src={event.cloudinaryUrl}
                   alt={event.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               ) : (

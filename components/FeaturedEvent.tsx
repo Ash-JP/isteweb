@@ -1,6 +1,6 @@
 "use client";
 
-import { urlFor } from "@/sanity/client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, MapPin, ArrowRight, Sparkles } from "lucide-react";
@@ -13,7 +13,7 @@ export default function FeaturedEvent({ event }: { event: any }) {
         <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden py-20">
             {/* Background Image with Parallax-like Overlay */}
             <div className="absolute inset-0 z-0">
-                {event.image && (
+                {event.cloudinaryUrl && (
                     <motion.div
                         initial={{ scale: 1.1 }}
                         animate={{ scale: 1 }}
@@ -21,9 +21,10 @@ export default function FeaturedEvent({ event }: { event: any }) {
                         className="relative w-full h-full"
                     >
                         <Image
-                            src={urlFor(event.image).url()}
+                            src={event.cloudinaryUrl}
                             alt={event.title}
                             fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover opacity-30 blur-sm"
                         />
                     </motion.div>
@@ -133,12 +134,14 @@ export default function FeaturedEvent({ event }: { event: any }) {
                         <div className="absolute -inset-4 bg-gradient-to-tr from-sky-500 to-purple-600 rounded-[2rem] opacity-30 blur-2xl animate-pulse-slow"></div>
 
                         <div className="relative h-full w-full rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-sky-900/20 group hover-3d-card">
-                            {event.image && (
+                            {event.cloudinaryUrl && (
                                 <Image
-                                    src={urlFor(event.image).url()}
+                                    src={event.cloudinaryUrl}
                                     alt={event.title}
                                     fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                    priority
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
                             )}
 

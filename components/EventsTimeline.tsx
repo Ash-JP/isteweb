@@ -3,14 +3,13 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Image from "next/image";
-import { urlFor } from "@/sanity/client";
+
 import { Calendar, ArrowUpRight } from "lucide-react";
 
 interface Event {
     _id: string;
     title: string;
-    date: string;
-    image: any;
+    date: string;    cloudinaryUrl?: string | null;
     description: string;
     status: string;
 }
@@ -37,11 +36,12 @@ export default function EventsTimeline({ events }: { events: Event[] }) {
                             initial={{ borderRadius: "1.5rem" }}
                         >
                             {/* Background Image */}
-                            {event.image && (
+                            {event.cloudinaryUrl && (
                                 <Image
-                                    src={urlFor(event.image).url()}
+                                    src={event.cloudinaryUrl}
                                     alt={event.title}
                                     fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     className={`object-cover transition-transform duration-700 ${isHovered ? 'scale-100 blur-0' : 'scale-150 blur-sm grayscale'}`}
                                 />
                             )}

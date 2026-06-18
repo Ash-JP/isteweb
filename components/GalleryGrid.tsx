@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { urlFor } from '@/sanity/lib/image';
+
 
 interface GalleryItem {
     _id: string;
     title: string;
     category: string;
-    image: any;
-    date: string;
+    cloudinaryUrl?: string | null;
+    date: string | null;
 }
 
 interface GalleryGridProps {
@@ -71,11 +71,12 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
                             key={item._id}
                             className="group relative overflow-hidden rounded-2xl bg-gray-800 aspect-[4/3] border border-white/10"
                         >
-                            {item.image && (
+                            {item.cloudinaryUrl && (
                                 <Image
-                                    src={urlFor(item.image).url()}
+                                    src={item.cloudinaryUrl}
                                     alt={item.title}
                                     fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                                 />
                             )}
@@ -89,7 +90,7 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
                                     {item.title}
                                 </h3>
                                 <p className="text-gray-300 text-sm mt-1">
-                                    {new Date(item.date).toLocaleDateString()}
+                                    {item.date ? new Date(item.date).toLocaleDateString() : 'Unknown date'}
                                 </p>
                             </div>
                         </div>

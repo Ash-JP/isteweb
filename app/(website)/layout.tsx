@@ -2,8 +2,10 @@ import type { Metadata } from 'next';
 import { Inter, Outfit, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import LayoutWrapper from '@/components/LayoutWrapper';
+import dynamic from 'next/dynamic';
 import Preloader from '@/components/Preloader';
-import MouseParticleTrail from '@/components/MouseParticleTrail';
+
+const MouseParticleTrail = dynamic(() => import('@/components/MouseParticleTrail'));
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' });

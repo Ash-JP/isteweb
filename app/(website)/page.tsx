@@ -1,43 +1,54 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import Hero from "@/components/Hero";
-import AboutSection from "@/components/AboutSection";
-import WhatWeOfferSection from "@/components/WhatWeOfferSection";
-import UpcomingEventsSection from "@/components/UpcomingEventsSection";
-import FinalCTASection from "@/components/FinalCTASection";
-import { client } from "@/sanity/client";
+
+const AboutSection = dynamic(() => import("@/components/AboutSection"));
+const WhatWeOfferSection = dynamic(() => import("@/components/WhatWeOfferSection"));
+const UpcomingEventsSection = dynamic(() => import("@/components/UpcomingEventsSection"));
+const FinalCTASection = dynamic(() => import("@/components/FinalCTASection"));
+
 
 export const metadata: Metadata = {
   title: "Home",
   description: "Discover ISTE CEAL, connecting students with opportunities in technology, engineering, and innovation.",
 };
 
-async function getCountdownEvent() {
-  // Query the homepage singleton first
-  const query = `
-    *[_type == "homepage"][0] {
-      countdownEvent->{
-        title,
-        description,
-        date,
-        slug
-      }
-    }
-  `;
-  const data = await client.fetch(query, {}, { next: { revalidate: 60 } });
+import { reader } from "@/lib/keystatic";
 
-  // If a countdown event is selected in the homepage settings, use it
-  if (data?.countdownEvent) {
-    return data.countdownEvent;
+async function getCountdownEvent() {
+  const homepageSettings = await reader.singletons.homepage.read();
+  
+  if (homepageSettings?.countdownEventSlug) {
+    const event = await reader.collections.events.read(homepageSettings.countdownEventSlug);
+    if (event) {
+      return {
+        title: event.title,
+        description: event.description,
+        date: event.date || "",
+        slug: { current: homepageSettings.countdownEventSlug }
+      };
+    }
   }
 
-  // Fallback: Get the next upcoming event
-  const fallbackQuery = `*[_type == "event" && status == "upcoming"] | order(date asc)[0] {
-    title,
-    description,
-    date,
-    slug
-  }`;
-  return await client.fetch(fallbackQuery, {}, { next: { revalidate: 60 } });
+  const allEvents = await reader.collections.events.all();
+  const upcomingEvents = allEvents.filter(e => e.entry.status === 'upcoming');
+  
+  upcomingEvents.sort((a, b) => {
+    if (!a.entry.date || !b.entry.date) return 0;
+    return new Date(a.entry.date).getTime() - new Date(b.entry.date).getTime();
+  });
+
+  if (upcomingEvents.length > 0) {
+    const e = upcomingEvents[0];
+    return {
+      title: e.entry.title,
+      description: e.entry.description,
+      date: e.entry.date || "",
+      slug: { current: e.slug }
+    };
+  }
+  
+  return undefined;
 }
 
 export default async function Home() {

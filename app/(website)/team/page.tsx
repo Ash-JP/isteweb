@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { client } from "@/sanity/client";
+
 import TeamPresenter from "@/components/TeamPresenter";
 import { Users, Award, Target, Sparkles } from "lucide-react";
 
@@ -8,19 +8,19 @@ export const metadata: Metadata = {
   description: 'Meet the passionate individuals driving innovation and excellence at ISTE CEAL.',
 };
 
+import { reader } from "@/lib/keystatic";
+
 async function getTeam() {
-  const query = `*[_type == "execom"] {
-    _id,
-    name,
-    role,
-    year,
-    image,
-    linkedin,
-    instagram,
-    email,
-    github
-  }`;
-  return await client.fetch(query, {}, { cache: 'no-store' });
+  const execom = await reader.collections.execom.all();
+  return execom.map((member) => ({
+    _id: member.slug,
+    slug: member.slug,
+    ...member.entry,
+    linkedin: member.entry.linkedin || undefined,
+    github: member.entry.github || undefined,
+    instagram: member.entry.instagram || undefined,
+    cloudinaryUrl: member.entry.cloudinaryUrl || undefined,
+  }));
 }
 
 export default async function TeamPage() {

@@ -1,23 +1,46 @@
-import { client, urlFor } from "@/sanity/client";
+import { reader } from "@/lib/keystatic";
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, CheckCircle, XCircle } from "lucide-react";
-import { notFound } from "next/navigation";
 
 // 1. Fetch the specific event
 async function getEvent(slug: string) {
-  const query = `*[_type == "event" && slug.current == $slug][0] {
-    title,
-    date,
-    image,
-    description,
-    isRegistrationOpen,
-    registrationLink
-  }`;
-  
-  // This passes the slug correctly to Sanity
-  const event = await client.fetch(query, { slug });
+  const event = await reader.collections.events.read(slug);
   return event;
+}
+
+export async function generateStaticParams() {
+  const events = await reader.collections.events.all();
+  return events.map((event) => ({
+    slug: event.slug,
+  }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const event = await getEvent(slug);
+  
+  if (!event) {
+    return {
+      title: 'Event Not Found',
+    };
+  }
+
+  return {
+    title: event.title,
+    description: event.description.substring(0, 160),
+    openGraph: {
+      title: `${event.title} | ISTE CEAL`,
+      description: event.description.substring(0, 160),
+      images: event.cloudinaryUrl ? [event.cloudinaryUrl] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: event.title,
+      description: event.description.substring(0, 160),
+      images: event.cloudinaryUrl ? [event.cloudinaryUrl] : [],
+    },
+  };
 }
 
 // 2. The Page Component (Fixed for Next.js 15)
@@ -45,10 +68,10 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ s
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
         
         {/* Event Image */}
-        {event.image && (
+        {event.cloudinaryUrl && (
           <div className="relative h-64 sm:h-96 w-full">
             <Image
-              src={urlFor(event.image).url()}
+              src={event.cloudinaryUrl}
               alt={event.title}
               fill
               className="object-cover"
@@ -82,12 +105,12 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ s
           <div className="flex items-center text-gray-500 mb-8">
             <Calendar className="w-5 h-5 mr-2" />
             <span className="text-lg font-medium">
-              {new Date(event.date).toLocaleDateString("en-IN", {
+              {event.date ? new Date(event.date).toLocaleDateString("en-IN", {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
-              })}
+              }) : 'TBA'}
             </span>
           </div>
 

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { urlFor } from "@/sanity/client";
+
 
 interface EventNodeProps {
     event: any;
@@ -63,11 +63,12 @@ export default function EventNode({ event, position, onClick, index }: EventNode
                 <div className="flex gap-4 items-center">
                     {/* Square Image Thumbnail */}
                     <div className="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border border-white/10 group-hover:border-sky-500/30 transition-colors">
-                        {event.image ? (
+                        {event.cloudinaryUrl ? (
                             <Image
-                                src={urlFor(event.image).url()}
+                                src={event.cloudinaryUrl}
                                 alt={event.title}
                                 fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 className="object-cover group-hover:scale-110 transition-transform duration-500"
                             />
                         ) : (

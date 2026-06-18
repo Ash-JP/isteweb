@@ -2,15 +2,14 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { urlFor } from "@/sanity/client";
+
 import { Linkedin, Instagram, Mail, Github } from "lucide-react";
 
 interface Member {
     _id: string;
     name: string;
     role: string;
-    year: string;
-    image: any;
+    year: string;    cloudinaryUrl?: string | null;
     linkedin?: string;
     instagram?: string;
     email?: string;
@@ -61,11 +60,12 @@ export default function TeamTree({ members }: { members: Member[] }) {
                 className={`relative w-64 p-4 rounded-2xl bg-gray-900/40 backdrop-blur-md border ${colorStyles.split(" ")[0]} shadow-lg transition-all duration-300 z-10 flex items-center gap-4`}
             >
                 <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white/10 shrink-0">
-                    {member.image ? (
+                    {member.cloudinaryUrl ? (
                         <Image
-                            src={urlFor(member.image).url()}
+                            src={member.cloudinaryUrl}
                             alt={member.name}
                             fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover"
                         />
                     ) : (

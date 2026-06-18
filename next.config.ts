@@ -2,11 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    unoptimized: true,
+    loader: 'custom',
+    loaderFile: './cloudinary-loader.js',
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'cdn.sanity.io',
+        hostname: 'res.cloudinary.com',
         port: '',
         pathname: '/**',
       },

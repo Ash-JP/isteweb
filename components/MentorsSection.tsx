@@ -2,14 +2,14 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { urlFor } from "@/sanity/client";
 import { Linkedin, Mail, GraduationCap } from "lucide-react";
 
 interface Member {
     _id: string;
     name: string;
     role: string;
-    image: any;
+    cloudinaryUrl?: string | null;
+    customRole?: string | null;
     linkedin?: string;
     email?: string;
 }
@@ -61,11 +61,12 @@ export default function MentorsSection({ members }: { members: Member[] }) {
                                 <div className="absolute -inset-2 rounded-full border border-dashed border-yellow-500/20 animate-spin-slow" />
 
                                 <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-white/10 group-hover:border-yellow-500/50 transition-colors shadow-2xl">
-                                    {member.image ? (
+                                    {member.cloudinaryUrl ? (
                                         <Image
-                                            src={urlFor(member.image).url()}
+                                            src={member.cloudinaryUrl}
                                             alt={member.name}
                                             fill
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
                                     ) : (
@@ -82,7 +83,9 @@ export default function MentorsSection({ members }: { members: Member[] }) {
                                     {member.name}
                                 </h3>
                                 <div className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-6">
-                                    {member.role.replace("-", " ")}
+                                    {member.role === 'other' && member.customRole 
+                                        ? member.customRole 
+                                        : member.role.replace("-", " ")}
                                 </div>
 
                                 {/* Divider */}

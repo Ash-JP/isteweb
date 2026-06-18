@@ -227,10 +227,10 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               {/* Admin Button (Hidden on mobile) */}
               <Link
-                href="/studio"
+                href="/keystatic"
                 className={`
                   hidden lg:flex group relative p-2.5 rounded-xl transition-all duration-500 ease-out
-                  ${isActive('/studio')
+                  ${isActive('/keystatic')
                     ? 'bg-white/20 shadow-lg backdrop-blur-sm'
                     : 'hover:bg-white/10 backdrop-blur-sm'
                   }
@@ -240,7 +240,7 @@ export default function Navbar() {
                 <Settings
                   className={`
                     w-5 h-5 transition-all duration-500 ease-out
-                    ${isActive('/studio') ? 'text-sky-300' : 'text-white/60 group-hover:text-white'}
+                    ${isActive('/keystatic') ? 'text-sky-300' : 'text-white/60 group-hover:text-white'}
                     group-hover:rotate-180 group-hover:scale-110
                   `}
                   style={{
@@ -298,7 +298,7 @@ export default function Navbar() {
 
               {/* Mobile Admin Link */}
               <Link
-                href="/studio"
+                href="/keystatic"
                 onClick={() => setIsOpen(false)}
                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold bg-white/5 text-white/80 hover:bg-white/10 hover:text-white transition-all duration-300 mt-2"
               >

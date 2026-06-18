@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { urlFor } from "@/sanity/client";
+
 import { Linkedin, Instagram, Mail, Github, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -10,7 +10,8 @@ interface Member {
   name: string;
   role: string;
   year: string;
-  image: any;
+  cloudinaryUrl?: string | null;
+  customRole?: string | null;
   linkedin?: string;
   instagram?: string;
   email?: string;
@@ -21,7 +22,10 @@ export default function TeamSection({ title, members }: { title: string; members
   if (members.length === 0) return null;
 
   // Format role name
-  const formatRole = (role: string) => {
+  const formatRole = (role: string, customRole?: string | null) => {
+    if (role === 'other' && customRole) {
+      return customRole;
+    }
     return role
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -81,11 +85,12 @@ export default function TeamSection({ title, members }: { title: string; members
 
               {/* Left: Image Section */}
               <div className="relative w-full sm:w-48 h-48 sm:h-auto shrink-0 bg-white/5">
-                {member.image ? (
+                {member.cloudinaryUrl ? (
                   <Image
-                    src={urlFor(member.image).url()}
+                    src={member.cloudinaryUrl}
                     alt={member.name}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 ) : (
@@ -101,7 +106,7 @@ export default function TeamSection({ title, members }: { title: string; members
               <div className="flex-1 p-6 flex flex-col justify-center relative">
                 {/* Role Badge */}
                 <div className="inline-flex self-start px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-xs font-semibold text-sky-400 mb-3 uppercase tracking-wider">
-                  {formatRole(member.role)}
+                  {formatRole(member.role, member.customRole)}
                 </div>
 
                 <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-sky-300 transition-colors">

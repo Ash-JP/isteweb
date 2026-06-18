@@ -2,15 +2,14 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { urlFor } from "@/sanity/client";
+
 import { Linkedin, Instagram, Mail } from "lucide-react";
 
 interface TeamMember {
   _id: string;
   name: string;
   role: string;
-  year: string;
-  image: any;
+  year: string;    cloudinaryUrl?: string | null;
   linkedin?: string;
   instagram?: string;
   email?: string;
@@ -55,11 +54,12 @@ export default function TeamFeed({ members }: { members: TeamMember[] }) {
           >
             {/* Member Image */}
             <div className="relative aspect-square w-full bg-gray-100 overflow-hidden">
-              {member.image ? (
+              {member.cloudinaryUrl ? (
                 <Image
-                  src={urlFor(member.image).url()}
+                  src={member.cloudinaryUrl}
                   alt={member.name}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               ) : (

@@ -3,15 +3,14 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useAnimation, PanInfo, useMotionValue, useTransform } from "framer-motion";
 import Image from "next/image";
-import { urlFor } from "@/sanity/client";
+
 import { Linkedin, Instagram, Mail, Github } from "lucide-react";
 
 interface Member {
     _id: string;
     name: string;
     role: string;
-    year: string;
-    image: any;
+    year: string;    cloudinaryUrl?: string | null;
     linkedin?: string;
     instagram?: string;
     email?: string;
@@ -90,8 +89,8 @@ export default function InfinityScroll({ members }: { members: Member[] }) {
 
                                 {/* Image */}
                                 <div className="relative w-32 h-32 md:w-40 md:h-40 shrink-0 rounded-full border-4 border-white/5 overflow-hidden shadow-inner">
-                                    {member.image ? (
-                                        <Image src={urlFor(member.image).url()} alt={member.name} fill className="object-cover" />
+                                    {member.cloudinaryUrl ? (
+                                        <Image src={member.cloudinaryUrl} alt={member.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover" />
                                     ) : (
                                         <div className="w-full h-full bg-gray-700" />
                                     )}

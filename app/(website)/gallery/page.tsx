@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
-import { client } from '@/sanity/client';
+import { reader } from '@/lib/keystatic';
 import GalleryGrid from '@/components/GalleryGrid';
 
-// Revalidate every 60 seconds, or use no-store for fresh data
 export const revalidate = 60;
 
 export const metadata: Metadata = {
@@ -11,16 +10,14 @@ export const metadata: Metadata = {
 };
 
 export default async function GalleryPage() {
-    const query = `*[_type == "gallery"] | order(date desc) {
-        _id,
-        title,
-        category,
-        image,
-        date
-    }`;
-
-    // Fetch data on the server
-    const items = await client.fetch(query);
+    const rawItems = await reader.collections.gallery.all();
+    const items = rawItems.map(item => ({
+        _id: item.slug,
+        ...item.entry
+    })).sort((a, b) => {
+        if (!a.date || !b.date) return 0;
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
 
     return (
         <GalleryGrid items={items} />

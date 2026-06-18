@@ -13,7 +13,8 @@ interface Member {
     name: string;
     role: string;
     year: string;
-    image: any;
+    cloudinaryUrl?: string | null;
+    customRole?: string | null;
     linkedin?: string;
     instagram?: string;
     email?: string;
@@ -34,7 +35,7 @@ export default function TeamPresenter({ members }: { members: Member[] }) {
     // 4. Hierarchical Sort for the Main Loop
     const hierarchyOrder = [
         "chairperson", "vice-chairperson",
-        "secretary", "joint-secretary", "treasurer",
+        "secretary", "vice-secretary", "joint-secretary", "treasurer",
         "tech-lead", "design-lead", "media-lead", "event-coordinator",
         "content-writer", "documentation-team", "community-rep", "membership-developer",
         "volunteer", "member"

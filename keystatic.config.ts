@@ -1,0 +1,119 @@
+import { config, fields, collection, singleton } from '@keystatic/core';
+
+export default config({
+  storage: {
+    kind: 'local', // We will use local in dev. In production, we'll configure GitHub.
+  },
+  collections: {
+    events: collection({
+      label: 'Events',
+      slugField: 'title',
+      path: 'src/content/events/*',
+      format: { data: 'json' },
+      schema: {
+        title: fields.slug({ name: { label: 'Event Name' } }),
+        year: fields.select({
+          label: 'Academic Year',
+          options: [
+            { label: '2023-2024', value: '2023-24' },
+            { label: '2024-2025', value: '2024-25' },
+            { label: '2025-2026', value: '2025-26' },
+          ],
+          defaultValue: '2024-25',
+        }),
+        date: fields.date({ label: 'Event Date' }),
+        cloudinaryUrl: fields.url({ 
+          label: 'Cloudinary Image URL', 
+          description: 'Upload your image to Cloudinary and paste the link here.'
+        }),
+        description: fields.text({ label: 'Description', multiline: true }),
+        isRegistrationOpen: fields.checkbox({ label: 'Registration Open?', defaultValue: false }),
+        status: fields.select({
+          label: 'Event Status',
+          options: [
+            { label: 'Upcoming', value: 'upcoming' },
+            { label: 'Ongoing', value: 'ongoing' },
+            { label: 'Completed', value: 'completed' },
+          ],
+          defaultValue: 'upcoming'
+        }),
+        featured: fields.checkbox({ label: 'Feature this event?', defaultValue: false }),
+        isCountdownEvent: fields.checkbox({ label: 'Show in Countdown Section?', defaultValue: false }),
+        registrationLink: fields.url({ label: 'Registration Link' }),
+      },
+    }),
+    execom: collection({
+      label: 'Execom Members',
+      slugField: 'name',
+      path: 'src/content/execom/*',
+      format: { data: 'json' },
+      schema: {
+        name: fields.slug({ name: { label: 'Name' } }),
+        role: fields.select({
+          label: 'Role',
+          options: [
+            { label: 'Faculty Advisor', value: 'faculty-advisor' },
+            { label: 'Mentor', value: 'mentor' },
+            { label: 'Chairperson', value: 'chairperson' },
+            { label: 'Vice Chairperson', value: 'vice-chairperson' },
+            { label: 'Secretary', value: 'secretary' },
+            { label: 'Vice Secretary', value: 'vice-secretary' },
+            { label: 'Tech Lead', value: 'tech-lead' },
+            { label: 'Developer', value: 'developer' },
+            { label: 'Content Writer', value: 'content-writer' },
+            { label: 'Documentation Lead', value: 'documentation-lead' },
+            { label: 'Media Team', value: 'media-team' },
+            { label: 'Design Team', value: 'design-team' },
+            { label: 'Event Coordinator', value: 'event-coordinator' },
+            { label: 'Community Rep', value: 'community-rep' },
+            { label: 'Treasurer', value: 'treasurer' },
+            { label: 'Membership', value: 'membership' },
+            { label: 'Volunteer', value: 'volunteer' },
+            { label: 'Member', value: 'member' },
+            { label: 'Other (Custom)', value: 'other' },
+          ],
+          defaultValue: 'member',
+        }),
+        customRole: fields.text({ label: 'Custom Role Title (Only if "Other" is selected above)' }),
+        year: fields.text({ label: 'Academic Year', defaultValue: '2024-25' }),
+        cloudinaryUrl: fields.url({ label: 'Profile Photo (Cloudinary URL)' }),
+        email: fields.text({ label: 'Email' }),
+        linkedin: fields.url({ label: 'LinkedIn URL' }),
+        github: fields.url({ label: 'GitHub URL' }),
+        instagram: fields.url({ label: 'Instagram URL' }),
+      },
+    }),
+    gallery: collection({
+      label: 'Gallery',
+      slugField: 'title',
+      path: 'src/content/gallery/*',
+      format: { data: 'json' },
+      schema: {
+        title: fields.slug({ name: { label: 'Image Title' } }),
+        category: fields.select({
+          label: 'Category',
+          options: [
+            { label: 'Workshop', value: 'Workshop' },
+            { label: 'Hackathon', value: 'Hackathon' },
+            { label: 'Team Building', value: 'Team Building' },
+            { label: 'Conference', value: 'Conference' },
+            { label: 'Other', value: 'Other' },
+          ],
+          defaultValue: 'Other'
+        }),
+        cloudinaryUrl: fields.url({ label: 'Image (Cloudinary URL)' }),
+        date: fields.date({ label: 'Date Taken' }),
+      },
+    }),
+  },
+  singletons: {
+    homepage: singleton({
+      label: 'Homepage Settings',
+      path: 'src/content/homepage',
+      format: { data: 'json' },
+      schema: {
+        countdownEventSlug: fields.text({ label: 'Countdown Event Slug' }),
+      },
+    }),
+  },
+});

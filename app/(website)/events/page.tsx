@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { client } from "@/sanity/client";
+
 import FeaturedEvent from "@/components/FeaturedEvent";
 import CurvedTimeline from "@/components/CurvedTimeline";
 
@@ -8,20 +8,18 @@ export const metadata: Metadata = {
   description: 'Explore our history of workshops, hackathons, seminars, and tech events.',
 };
 
+import { reader } from "@/lib/keystatic";
+
 async function getEvents() {
-  const query = `*[_type == "event"] | order(date desc) {
-    _id,
-    title,
-    date,
-    image,
-    description,
-    status,
-    location,
-    registrationLink,
-    featured,
-    year
-  }`;
-  return await client.fetch(query, {}, { cache: 'no-store' });
+  const events = await reader.collections.events.all();
+  return events.map((event) => ({
+    _id: event.slug,
+    slug: event.slug,
+    ...event.entry,
+  })).sort((a, b) => {
+    if (!a.date || !b.date) return 0;
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
 }
 
 export default async function EventsPage() {
@@ -30,8 +28,8 @@ export default async function EventsPage() {
   // Find featured, fallback to latest upcoming, fallback to latest
   const featuredEvent = events.find((e: any) => e.featured) || events.find((e: any) => e.status === 'upcoming') || events[0];
 
-  // Rest of events for timeline (exclude featured if you want, or keep all)
-  const timelineEvents = events.filter((e: any) => e._id !== featuredEvent?._id);
+  // Rest of events for timeline: we pass ALL events so the timeline graph is complete and accurate
+  const timelineEvents = events;
 
   return (
     <main className="min-h-screen bg-[#020617]">

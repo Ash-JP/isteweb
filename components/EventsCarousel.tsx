@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { urlFor } from "@/sanity/client";
+
 import { ChevronLeft, ChevronRight, Calendar, ExternalLink } from "lucide-react";
 
 interface Event {
@@ -11,8 +11,7 @@ interface Event {
   title: string;
   slug: { current: string };
   year: string;
-  date: string;
-  image: any;
+  date: string;    cloudinaryUrl?: string | null;
   description: string;
 }
 
@@ -90,11 +89,12 @@ export default function EventsCarousel({ events }: { events: Event[] }) {
           
           {/* Image */}
           <div className="relative h-72 w-full bg-gradient-to-br from-navy-100 to-sky-100 overflow-hidden group">
-            {currentEvent.image ? (
+            {currentEvent.cloudinaryUrl ? (
               <Image
-                src={urlFor(currentEvent.image).url()}
+                src={currentEvent.cloudinaryUrl}
                 alt={currentEvent.title}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
                 priority
               />
