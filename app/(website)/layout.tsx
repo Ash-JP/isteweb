@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import Preloader from '@/components/Preloader';
 
 const MouseParticleTrail = dynamic(() => import('@/components/MouseParticleTrail'));
+import EasterEgg from '@/components/EasterEgg';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' });
@@ -85,6 +86,7 @@ export default function RootLayout({
           {children}
         </LayoutWrapper>
         <MouseParticleTrail />
+        <EasterEgg />
       </body>
     </html>
   );
