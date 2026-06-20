@@ -36,7 +36,7 @@ export default function TeamPresenter({ members }: { members: Member[] }) {
     const hierarchyOrder = [
         "chairperson", "vice-chairperson",
         "secretary", "vice-secretary", "joint-secretary", "treasurer",
-        "tech-lead", "design-lead", "media-lead", "event-coordinator",
+        "tech-lead", "media-lead", "design-lead", "event-coordinator",
         "content-writer", "documentation-team", "community-rep", "membership-developer",
         "volunteer", "member"
     ];

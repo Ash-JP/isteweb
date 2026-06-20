@@ -24,9 +24,10 @@ const CARD_WIDTH = 300;
 const GAP = 25;
 
 export default function HorizontalCarousel({ members }: { members: Member[] }) {
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const [isHovering, setIsHovering] = useState(false);
+    const [touchStart, setTouchStart] = useState<number | null>(null);
 
     // Physics-based rotation
     const rotation = useSpring(0, { stiffness: 120, damping: 20 });
@@ -38,14 +39,14 @@ export default function HorizontalCarousel({ members }: { members: Member[] }) {
     const theta = 360 / Math.max(members.length, 1);
 
     useEffect(() => {
-        rotation.set(-activeIndex * theta);
-    }, [activeIndex, theta, rotation]);
+        rotation.set(-currentIndex * theta);
+    }, [currentIndex, theta, rotation]);
 
     // Auto-play
     useEffect(() => {
         if (isHovering) return;
         const interval = setInterval(() => {
-            setActiveIndex((prev) => (prev + 1) % members.length);
+            setCurrentIndex((prev) => prev + 1);
         }, 4000);
         return () => clearInterval(interval);
     }, [isHovering, members.length]);
@@ -53,10 +54,42 @@ export default function HorizontalCarousel({ members }: { members: Member[] }) {
     const handleDragEnd = (_: any, info: PanInfo) => {
         const swipeThreshold = 50;
         if (info.offset.x > swipeThreshold) {
-            setActiveIndex((prev) => (prev - 1 + members.length) % members.length);
+            setCurrentIndex((prev) => prev - 1);
         } else if (info.offset.x < -swipeThreshold) {
-            setActiveIndex((prev) => (prev + 1) % members.length);
+            setCurrentIndex((prev) => prev + 1);
         }
+    };
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (touchStart === null) return;
+        const touchEnd = e.changedTouches[0].clientX;
+        const diff = touchStart - touchEnd;
+
+        const swipeThreshold = 50;
+        if (diff > swipeThreshold) {
+            // Swipe left
+            setCurrentIndex((prev) => prev + 1);
+        } else if (diff < -swipeThreshold) {
+            // Swipe right
+            setCurrentIndex((prev) => prev - 1);
+        }
+        setTouchStart(null);
+    };
+
+    const activeIndex = ((currentIndex % members.length) + members.length) % members.length;
+
+    const handleCardClick = (targetIndex: number) => {
+        let diff = targetIndex - activeIndex;
+        if (diff > members.length / 2) {
+            diff -= members.length;
+        } else if (diff < -members.length / 2) {
+            diff += members.length;
+        }
+        setCurrentIndex(prev => prev + diff);
     };
 
     const formatRole = (role: string, customRole?: string | null) => {
@@ -72,17 +105,19 @@ export default function HorizontalCarousel({ members }: { members: Member[] }) {
             ref={containerRef}
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
         >
             {/* Navigation Buttons */}
             <button
                 className="absolute left-4 md:left-12 z-50 w-12 h-12 rounded-full bg-white text-gray-900 shadow-lg flex items-center justify-center hover:bg-sky-500 hover:text-white transition-all duration-300 group"
-                onClick={() => setActiveIndex((prev) => (prev - 1 + members.length) % members.length)}
+                onClick={() => setCurrentIndex((prev) => prev - 1)}
             >
                 <ChevronLeft className="group-hover:-translate-x-1 transition-transform" />
             </button>
             <button
                 className="absolute right-4 md:right-12 z-50 w-12 h-12 rounded-full bg-white text-gray-900 shadow-lg flex items-center justify-center hover:bg-sky-500 hover:text-white transition-all duration-300 group"
-                onClick={() => setActiveIndex((prev) => (prev + 1) % members.length)}
+                onClick={() => setCurrentIndex((prev) => prev + 1)}
             >
                 <ChevronRight className="group-hover:translate-x-1 transition-transform" />
             </button>
@@ -95,9 +130,6 @@ export default function HorizontalCarousel({ members }: { members: Member[] }) {
                     z: -radius,
                     transformStyle: "preserve-3d"
                 }}
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                onDragEnd={handleDragEnd}
             >
                 {members.map((member, index) => {
                     const angle = index * theta;
@@ -116,7 +148,7 @@ export default function HorizontalCarousel({ members }: { members: Member[] }) {
                             {/* 3D Card - Light Theme */}
                             <div
                                 className={`relative w-full bg-white/95 backdrop-blur-md rounded-[1.5rem] overflow-hidden transition-all duration-500 ${isActive ? 'shadow-[0_0_60px_rgba(255,255,255,0.4)] scale-110 z-50 ring-4 ring-sky-400' : 'opacity-60 scale-90 z-0 grayscale-[0.3]'}`}
-                                onClick={() => setActiveIndex(index)}
+                                onClick={() => handleCardClick(index)}
                             >
                                 {/* Card Interior */}
                                 <div className="relative p-4 flex flex-col items-center h-[520px]">
