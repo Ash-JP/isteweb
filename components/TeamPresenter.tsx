@@ -37,7 +37,7 @@ export default function TeamPresenter({ members }: { members: Member[] }) {
         "chairperson", "vice-chairperson",
         "secretary", "vice-secretary", "joint-secretary", "treasurer",
         "tech-lead", "media-lead", "design-lead", "event-coordinator",
-        "content-writer", "documentation-team", "community-rep", "membership-developer",
+        "content-writer", "documentation-team", "membership-developer", "community-rep",
         "volunteer", "member"
     ];
 
@@ -53,19 +53,26 @@ export default function TeamPresenter({ members }: { members: Member[] }) {
     return (
         <div className="w-full">
             {/* Year Filter */}
-            <div className="flex justify-center flex-wrap gap-4 mb-16 z-50 relative">
-                {years.map((year) => (
-                    <button
-                        key={year}
-                        onClick={() => setSelectedYear(year)}
-                        className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 border ${selectedYear === year
-                            ? "bg-sky-500 text-white border-sky-500 shadow-lg shadow-sky-500/25 scale-105"
-                            : "bg-white/5 border-white/10 text-gray-400 hover:text-white hover:bg-white/10"
-                            }`}
+            <div className="flex justify-center mb-16 z-50 relative">
+                <div className="relative inline-block">
+                    <select
+                        value={selectedYear}
+                        onChange={(e) => setSelectedYear(e.target.value)}
+                        className="appearance-none bg-black/40 border border-white/10 text-white px-8 py-3 rounded-full font-medium focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all duration-300 cursor-pointer shadow-lg shadow-black/50 hover:bg-white/5 pr-12"
                     >
-                        {year}
-                    </button>
-                ))}
+                        {years.map((year) => (
+                            <option key={year} value={year} className="bg-gray-900 text-white">
+                                {year}
+                            </option>
+                        ))}
+                    </select>
+                    {/* Custom Dropdown Arrow */}
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
             </div>
 
             {/* Mentors Section (Distinct) */}

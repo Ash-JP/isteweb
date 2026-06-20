@@ -2,6 +2,15 @@ import { config, fields, collection, singleton } from '@keystatic/core';
 
 const isDev = process.env.NODE_ENV === 'development';
 
+const generateYears = () => {
+  const years = [];
+  for (let i = 2024; i <= 2100; i++) {
+    years.push({ label: `${i}-${i + 1}`, value: `${i}-${(i + 1).toString().slice(2)}` });
+  }
+  return years;
+};
+const yearOptions = generateYears();
+
 export default config({
   storage: isDev 
     ? { kind: 'local' }
@@ -19,11 +28,7 @@ export default config({
         title: fields.slug({ name: { label: 'Event Name' } }),
         year: fields.select({
           label: 'Academic Year',
-          options: [
-            { label: '2023-2024', value: '2023-24' },
-            { label: '2024-2025', value: '2024-25' },
-            { label: '2025-2026', value: '2025-26' },
-          ],
+          options: yearOptions,
           defaultValue: '2024-25',
         }),
         date: fields.date({ label: 'Event Date' }),
@@ -70,9 +75,9 @@ export default config({
             { label: 'Media Team', value: 'media-team' },
             { label: 'Design Team', value: 'design-team' },
             { label: 'Event Coordinator', value: 'event-coordinator' },
-            { label: 'Community Rep', value: 'community-rep' },
             { label: 'Treasurer', value: 'treasurer' },
-            { label: 'Membership', value: 'membership' },
+            { label: 'Membership Developer', value: 'membership-developer' },
+            { label: 'Community Rep', value: 'community-rep' },
             { label: 'Volunteer', value: 'volunteer' },
             { label: 'Member', value: 'member' },
             { label: 'Other (Custom)', value: 'other' },
@@ -80,7 +85,7 @@ export default config({
           defaultValue: 'member',
         }),
         customRole: fields.text({ label: 'Custom Role Title (Only if "Other" is selected above)' }),
-        year: fields.text({ label: 'Academic Year', defaultValue: '2024-25' }),
+        year: fields.select({ label: 'Academic Year', options: yearOptions, defaultValue: '2024-25' }),
         cloudinaryUrl: fields.url({ label: 'Profile Photo (Cloudinary URL)' }),
         email: fields.text({ label: 'Email' }),
         linkedin: fields.url({ label: 'LinkedIn URL' }),
