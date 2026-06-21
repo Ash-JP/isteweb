@@ -21,7 +21,7 @@ export default function AdminLoginPage() {
             const result = await verifyPassword(password);
 
             if (result.success) {
-                router.push('/studio');
+                router.push('/keystatic');
             } else {
                 setError('Incorrect password');
             }
@@ -53,6 +53,7 @@ export default function AdminLoginPage() {
                             placeholder="Enter password"
                             className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
                             required
+                            suppressHydrationWarning
                         />
                     </div>
 
@@ -66,6 +67,7 @@ export default function AdminLoginPage() {
                         type="submit"
                         disabled={isLoading}
                         className="w-full py-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-sky-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        suppressHydrationWarning
                     >
                         {isLoading ? 'Verifying...' : 'Access Studio'}
                     </button>

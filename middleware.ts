@@ -1,10 +1,9 @@
-
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-    // Only protect /studio and /studio/* routes
-    if (request.nextUrl.pathname.startsWith('/studio')) {
+    // Only protect /keystatic and /api/keystatic routes
+    if (request.nextUrl.pathname.startsWith('/keystatic') || request.nextUrl.pathname.startsWith('/api/keystatic')) {
         const adminToken = request.cookies.get('admin-token');
 
         // If no token, redirect to login page
@@ -17,5 +16,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: '/studio/:path*',
+    matcher: ['/keystatic/:path*', '/api/keystatic/:path*'],
 };

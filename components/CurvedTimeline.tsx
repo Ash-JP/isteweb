@@ -43,9 +43,9 @@ export default function CurvedTimeline({ events }: CurvedTimelineProps) {
                 {[...Array(4)].map((_, i) => (
                     <motion.div
                         key={i}
-                        className="absolute rounded-full border border-sky-500/20"
-                        initial={{ width: 100, height: 100, opacity: 0.5 }}
-                        animate={{ width: 2000, height: 2000, opacity: 0 }}
+                        className="absolute w-[100px] h-[100px] rounded-full border border-sky-500/20"
+                        initial={{ scale: 1, opacity: 0.5 }}
+                        animate={{ scale: 20, opacity: 0 }}
                         transition={{ 
                             duration: 10, 
                             repeat: Infinity, 

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 
-import TeamPresenter from "@/components/TeamPresenter";
+const TeamPresenter = dynamic(() => import("@/components/TeamPresenter"));
 import TeamHero from "@/components/TeamHero";
 import { Users, Award, Target, Sparkles } from "lucide-react";
 

@@ -1,7 +1,5 @@
-import ClientApp from "./ClientApp";
+import KeystaticApp from "../keystatic";
 
-export default async function Page(props: any) {
-  const params = await props.params;
-  const searchParams = await props.searchParams;
-  return <ClientApp params={params} searchParams={searchParams} />;
+export default function Page(props: any) {
+  return <KeystaticApp {...props} />;
 }

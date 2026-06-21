@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { reader } from '@/lib/keystatic';
-import GalleryGrid from '@/components/GalleryGrid';
+
+const GalleryGrid = dynamic(() => import("@/components/GalleryGrid"));
 
 export const revalidate = 60;
 

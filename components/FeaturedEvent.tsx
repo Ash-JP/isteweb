@@ -14,12 +14,7 @@ export default function FeaturedEvent({ event }: { event: any }) {
             {/* Background Image with Parallax-like Overlay */}
             <div className="absolute inset-0 z-0">
                 {event.cloudinaryUrl && (
-                    <motion.div
-                        initial={{ scale: 1.1 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 10, repeat: Infinity, repeatType: "reverse" }}
-                        className="relative w-full h-full"
-                    >
+                    <div className="relative w-full h-full">
                         <Image
                             src={event.cloudinaryUrl}
                             alt={event.title}
@@ -27,16 +22,16 @@ export default function FeaturedEvent({ event }: { event: any }) {
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover opacity-30 blur-sm"
                         />
-                    </motion.div>
+                    </div>
                 )}
                 {/* Modern Gradient Overlays */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/80 to-transparent" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#020617] via-[#020617]/60 to-transparent" />
 
-                {/* Animated Grain/Noise Overlay - CSS Replacement */}
-                <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay"
+                {/* Static Noise Overlay (Optimized) */}
+                <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
                     style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
                     }}
                 ></div>
             </div>

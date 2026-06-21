@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 
 import FeaturedEvent from "@/components/FeaturedEvent";
-import CurvedTimeline from "@/components/CurvedTimeline";
+const CurvedTimeline = dynamic(() => import("@/components/CurvedTimeline"));
 import Starfield from "@/components/Starfield";
 import JourneyHeader from "@/components/JourneyHeader";
 
