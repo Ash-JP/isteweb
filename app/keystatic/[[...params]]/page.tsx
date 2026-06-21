@@ -1,3 +1,5 @@
+import ClientApp from "./ClientApp";
+
 export default function Page() {
-  return null;
+  return <ClientApp />;
 }

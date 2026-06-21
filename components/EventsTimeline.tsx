@@ -69,7 +69,7 @@ export default function EventsTimeline({ events }: { events: Event[] }) {
                                         </span>
                                         <div className="flex items-center gap-1 text-sky-400 text-xs font-medium">
                                             <Calendar className="w-3 h-3" />
-                                            {new Date(event.date).toLocaleDateString()}
+                                            {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                         </div>
                                     </div>
 

@@ -10,7 +10,7 @@ export default function FeaturedEvent({ event }: { event: any }) {
     if (!event) return null;
 
     return (
-        <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden py-20">
+        <section className="relative w-full pt-32 pb-16 flex items-center justify-center overflow-hidden">
             {/* Background Image with Parallax-like Overlay */}
             <div className="absolute inset-0 z-0">
                 {event.cloudinaryUrl && (

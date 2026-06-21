@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 
 import FeaturedEvent from "@/components/FeaturedEvent";
 import CurvedTimeline from "@/components/CurvedTimeline";
+import Starfield from "@/components/Starfield";
+import JourneyHeader from "@/components/JourneyHeader";
 
 export const revalidate = 60;
 
@@ -44,7 +46,10 @@ export default async function EventsPage() {
   const timelineEvents = events;
 
   return (
-    <main className="min-h-screen bg-[#020617]">
+    <main className="relative min-h-screen bg-[#020617]">
+      {/* Global Background Effect */}
+      <Starfield />
+
       {/* Featured Hero Section */}
       {featuredEvent ? (
         <FeaturedEvent event={featuredEvent} />
@@ -55,16 +60,8 @@ export default async function EventsPage() {
       )}
 
       {/* Timeline Section */}
-      <section className="relative">
-        <div className="container-centered mb-12 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500">Journey</span>
-          </h2>
-          <div className="h-1 w-24 bg-gradient-to-r from-sky-400 to-purple-500 rounded-full mx-auto"></div>
-          <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
-            Explore our history of workshops, hackathons, and seminars.
-          </p>
-        </div>
+      <section className="relative z-10">
+        <JourneyHeader />
 
         {timelineEvents.length > 0 ? (
           <CurvedTimeline events={timelineEvents} />

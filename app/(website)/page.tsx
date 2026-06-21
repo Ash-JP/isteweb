@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Hero from "@/components/Hero";
+import Starfield from "@/components/Starfield";
 
 const AboutSection = dynamic(() => import("@/components/AboutSection"));
 const WhatWeOfferSection = dynamic(() => import("@/components/WhatWeOfferSection"));
@@ -61,7 +62,10 @@ export default async function Home() {
   const event = await getCountdownEvent();
 
   return (
-    <main className="min-h-screen">
+    <main className="relative min-h-screen bg-[#020617]">
+      {/* Global Background Effect */}
+      <Starfield />
+
       {/* Hero Section */}
       <Hero />
 

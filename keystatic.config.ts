@@ -12,6 +12,12 @@ const generateYears = () => {
 const yearOptions = generateYears();
 
 export default config({
+  ui: {
+    brand: { 
+      name: 'ISTE CEAL Admin',
+      href: '/keystatic'
+    },
+  },
   storage: isDev 
     ? { kind: 'local' }
     : {
@@ -32,7 +38,7 @@ export default config({
           defaultValue: '2024-25',
         }),
         date: fields.date({ label: 'Event Date' }),
-        cloudinaryUrl: fields.url({ 
+        cloudinaryUrl: fields.text({ 
           label: 'Cloudinary Image URL', 
           description: 'Upload your image to Cloudinary and paste the link here.'
         }),
@@ -49,7 +55,7 @@ export default config({
         }),
         featured: fields.checkbox({ label: 'Feature this event?', defaultValue: false }),
         isCountdownEvent: fields.checkbox({ label: 'Show in Countdown Section?', defaultValue: false }),
-        registrationLink: fields.url({ label: 'Registration Link' }),
+        registrationLink: fields.text({ label: 'Registration Link' }),
       },
     }),
     execom: collection({
@@ -86,11 +92,11 @@ export default config({
         }),
         customRole: fields.text({ label: 'Custom Role Title (Only if "Other" is selected above)' }),
         year: fields.select({ label: 'Academic Year', options: yearOptions, defaultValue: '2024-25' }),
-        cloudinaryUrl: fields.url({ label: 'Profile Photo (Cloudinary URL)' }),
+        cloudinaryUrl: fields.text({ label: 'Profile Photo (Cloudinary URL)' }),
         email: fields.text({ label: 'Email' }),
-        linkedin: fields.url({ label: 'LinkedIn URL' }),
-        github: fields.url({ label: 'GitHub URL' }),
-        instagram: fields.url({ label: 'Instagram URL' }),
+        linkedin: fields.text({ label: 'LinkedIn URL' }),
+        github: fields.text({ label: 'GitHub URL' }),
+        instagram: fields.text({ label: 'Instagram URL' }),
       },
     }),
     gallery: collection({
@@ -111,7 +117,7 @@ export default config({
           ],
           defaultValue: 'Other'
         }),
-        cloudinaryUrl: fields.url({ label: 'Image (Cloudinary URL)' }),
+        cloudinaryUrl: fields.text({ label: 'Image (Cloudinary URL)' }),
         date: fields.date({ label: 'Date Taken' }),
       },
     }),

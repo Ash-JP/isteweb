@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 import EventNode from "./EventNode";
 import TimelineModal from "./TimelineModal";
 
@@ -36,7 +37,31 @@ export default function CurvedTimeline({ events }: CurvedTimelineProps) {
     const amplitude = 150;
 
     return (
-        <div className="relative w-full min-h-screen bg-[#020617] overflow-hidden">
+        <div className="relative w-full py-10 overflow-hidden">
+            {/* BACKGROUND EFFECT: Expanding Concentric Ripples */}
+            <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center opacity-30">
+                {[...Array(4)].map((_, i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute rounded-full border border-sky-500/20"
+                        initial={{ width: 100, height: 100, opacity: 0.5 }}
+                        animate={{ width: 2000, height: 2000, opacity: 0 }}
+                        transition={{ 
+                            duration: 10, 
+                            repeat: Infinity, 
+                            ease: "linear",
+                            delay: i * 2.5
+                        }}
+                    />
+                ))}
+                {/* Slow glowing gradient at the center line */}
+                <motion.div 
+                    className="absolute w-full h-[300px] bg-gradient-to-r from-transparent via-purple-500/10 to-transparent blur-[50px] mix-blend-screen"
+                    animate={{ opacity: [0.1, 0.3, 0.1] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                />
+            </div>
+
             {/* Modal for Event Details */}
             <TimelineModal
                 event={selectedEvent}
@@ -44,6 +69,7 @@ export default function CurvedTimeline({ events }: CurvedTimelineProps) {
                 onClose={() => setSelectedEvent(null)}
             />
 
+            <div className="relative z-10">
             {/* MOBILE VIEW: Vertical Stack */}
             <div className="md:hidden py-12 px-4 space-y-16">
                 {sortedYears.map((year) => (
@@ -60,7 +86,7 @@ export default function CurvedTimeline({ events }: CurvedTimelineProps) {
                                     <div onClick={() => setSelectedEvent(event)}>
                                         <div className="bg-white/5 border border-white/10 p-4 rounded-xl cursor-pointer hover:bg-white/10 transition-colors">
                                             <h3 className="font-bold text-white mb-1">{event.title}</h3>
-                                            <p className="text-sm text-gray-400">{new Date(event.date).toLocaleDateString()}</p>
+                                            <p className="text-sm text-gray-400">{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -103,27 +129,18 @@ export default function CurvedTimeline({ events }: CurvedTimelineProps) {
                                     </linearGradient>
                                 </defs>
 
-                                <path
+                                <motion.path
+                                    initial={{ pathLength: 0 }}
+                                    whileInView={{ pathLength: 1 }}
+                                    viewport={{ once: true, margin: "-100px" }}
+                                    transition={{ duration: 3, ease: "easeInOut" }}
                                     d={`
                                         M 0 ${centerY}
                                         ${allEventsFlat.map((_, i) => {
                                         const width = eventWidth;
                                         const x = 50 + (i * width);
-                                        // Sine wave approximation:
-                                        // Start: (x, centerY)
-                                        // Control Point: peak
-                                        // End: (x + width, centerY)
-
-                                        // Actually connection logic:
-                                        // M x centerY
-                                        // Q (x + w/2) (centerY + dir * amp) (x + w) centerY
-
-                                        // Let's build a continuous path string.
-                                        // First segment: Line to first node start?
-
                                         const isEven = i % 2 === 0;
-                                        const dir = isEven ? 1 : -1; // Even = Bottom = +y
-
+                                        const dir = isEven ? 1 : -1; 
                                         return `Q ${x + width / 2} ${centerY + (dir * amplitude)} ${x + width} ${centerY}`;
                                     }).join(' ')}
                                         L ${totalWidth + 600} ${centerY}
@@ -154,7 +171,13 @@ export default function CurvedTimeline({ events }: CurvedTimelineProps) {
                                     const yEnd = isEven ? centerY + amplitude : centerY - amplitude;
 
                                     return (
-                                        <g key={i}>
+                                        <motion.g 
+                                            key={i}
+                                            initial={{ opacity: 0 }}
+                                            whileInView={{ opacity: 1 }}
+                                            viewport={{ once: true }}
+                                            transition={{ delay: 1 + (i * 0.1), duration: 0.5 }}
+                                        >
                                             <circle cx={xCenter} cy={yStart} r="4" fill="#0ea5e9" />
                                             <line
                                                 x1={xCenter} y1={yStart}
@@ -164,7 +187,7 @@ export default function CurvedTimeline({ events }: CurvedTimelineProps) {
                                                 strokeDasharray="4 4"
                                                 className="opacity-50"
                                             />
-                                        </g>
+                                        </motion.g>
                                     );
                                 })}
 
@@ -178,8 +201,17 @@ export default function CurvedTimeline({ events }: CurvedTimelineProps) {
                                 // Even index -> Bottom Node (curve goes down?)
                                 // Let's match line logic: i even -> curve went +dir (down in svg coords) -> Node at Bottom
 
-                                return (
-                                    <div
+                                 return (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        whileInView={{ opacity: 1, scale: 1 }}
+                                        viewport={{ once: true }}
+                                        transition={{ 
+                                            type: "spring", 
+                                            stiffness: 100, 
+                                            damping: 15,
+                                            delay: 1.2 + (index * 0.1) 
+                                        }}
                                         key={event._id}
                                         className="absolute top-0 h-full flex items-center justify-center p-0"
                                         style={{
@@ -203,12 +235,13 @@ export default function CurvedTimeline({ events }: CurvedTimelineProps) {
                                                 onClick={() => setSelectedEvent(event)}
                                             />
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 );
                             })}
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     );

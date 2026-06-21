@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import TeamPresenter from "@/components/TeamPresenter";
+import TeamHero from "@/components/TeamHero";
 import { Users, Award, Target, Sparkles } from "lucide-react";
 
 export const revalidate = 60;
@@ -46,32 +47,8 @@ export default async function TeamPage() {
       {/* Spacer for navbar */}
       <div className="h-20"></div>
 
-      {/* Hero Section */}
-      <section className="relative pt-12 pb-0 bg-transparent overflow-hidden">
-        {/* Gear Background */}
-        <div className="absolute top-20 right-20 opacity-5 pointer-events-none">
-          <svg className="w-64 h-64 gear-bg" viewBox="0 0 100 100" fill="#fff">
-            <path d="M50,10 L55,20 L60,10 L65,20 L70,10 L75,20 L80,15 L82,25 L90,20 L88,30 L95,30 L90,38 L95,45 L88,45 L90,55 L82,50 L80,60 L75,55 L70,65 L65,55 L60,65 L55,55 L50,65 L45,55 L40,65 L35,55 L30,65 L25,55 L20,60 L18,50 L10,55 L12,45 L5,45 L10,38 L5,30 L12,30 L10,20 L18,25 L20,15 L25,20 L30,10 L35,20 L40,10 L45,20 Z" />
-          </svg>
-        </div>
-
-        <div className="container-centered relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-500/10 border border-sky-500/20 rounded-full text-sm font-semibold text-sky-400 mb-6 animate-fade-in">
-              <Users className="w-4 h-4" />
-              <span>Execom</span>
-            </div>
-
-            <h1 className="font-extrabold mb-6 animate-fade-in-up text-white text-5xl md:text-6xl">
-              Meet Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500">Team</span>
-            </h1>
-
-            <p className="text-gray-400 animate-fade-in-up text-xl max-w-2xl mx-auto" style={{ animationDelay: '0.1s' }}>
-              The passionate individuals driving innovation and excellence at ISTE CEAL
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Animated Hero Section */}
+      <TeamHero />
 
       {/* Team Presenter (Infinity Scroll & Filtering) */}
       <section className="pb-20">
