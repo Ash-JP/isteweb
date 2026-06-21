@@ -12,11 +12,6 @@ const generateYears = () => {
 const yearOptions = generateYears();
 
 export default config({
-  ui: {
-    brand: { 
-      name: 'ISTE CEAL Admin',
-    },
-  },
   storage: isDev 
     ? { kind: 'local' }
     : {
@@ -29,6 +24,7 @@ export default config({
       slugField: 'title',
       path: 'src/content/events/*',
       format: { data: 'json' },
+      previewUrl: '/events',
       schema: {
         title: fields.slug({ name: { label: 'Event Name' } }),
         year: fields.select({
@@ -62,6 +58,7 @@ export default config({
       slugField: 'name',
       path: 'src/content/execom/*',
       format: { data: 'json' },
+      previewUrl: '/team',
       schema: {
         name: fields.slug({ name: { label: 'Name' } }),
         role: fields.select({
