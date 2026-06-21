@@ -7,6 +7,8 @@ const WhatWeOfferSection = dynamic(() => import("@/components/WhatWeOfferSection
 const UpcomingEventsSection = dynamic(() => import("@/components/UpcomingEventsSection"));
 const FinalCTASection = dynamic(() => import("@/components/FinalCTASection"));
 
+export const revalidate = 60;
+
 
 export const metadata: Metadata = {
   title: "Home",

@@ -48,7 +48,7 @@ export default function TeamPresenter({ members }: { members: Member[] }) {
     return (
         <div className="w-full">
             {/* Year Filter */}
-            <div className="flex justify-center mb-16 z-50 relative">
+            <div className="flex justify-center mb-4 z-50 relative mt-0">
                 <div className="relative inline-block">
                     <select
                         aria-label="Filter team by academic year"
@@ -75,11 +75,12 @@ export default function TeamPresenter({ members }: { members: Member[] }) {
             {advisors.length > 0 && <MentorsSection members={advisors} />}
 
             {/* Main Team Infinity Loop */}
-            <div className="animate-fade-in-up delay-100">
-                <h2 className="text-2xl font-bold text-white text-center mb-4 uppercase tracking-widest mt-20">
-                    The Team
-                </h2>
-                <div className="w-full h-px bg-gradient-to-r from-transparent via-sky-500/50 to-transparent mb-12" />
+            <div className="animate-fade-in-up delay-100 relative mt-16 mb-12">
+                <div className="text-center mb-12 relative z-10">
+                    <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
+                        Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500">Committee</span>
+                    </h2>
+                </div>
 
                 {mainTeam.length > 0 ? (
                     <HorizontalCarousel members={mainTeam} />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, useAnimation, PanInfo, useMotionValue, useTransform, useSpring } from "framer-motion";
+import { motion, useAnimation, PanInfo, useMotionValue, useTransform, useSpring, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 
 import { Linkedin, Instagram, Mail, Github, ChevronLeft, ChevronRight } from "lucide-react";

@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import FeaturedEvent from "@/components/FeaturedEvent";
 import CurvedTimeline from "@/components/CurvedTimeline";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: 'Events',
   description: 'Explore our history of workshops, hackathons, seminars, and tech events.',

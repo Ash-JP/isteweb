@@ -18,7 +18,7 @@ export default function MentorsSection({ members }: { members: Member[] }) {
     if (members.length === 0) return null;
 
     return (
-        <div className="relative py-32 mb-20">
+        <div className="relative pt-0 pb-12 mb-8">
             {/* Background Ambience */}
             <div className="absolute inset-0 flex justify-center overflow-hidden pointer-events-none">
                 <div className="w-[800px] h-[500px] bg-gold-500/5 rounded-full blur-[120px] -translate-y-1/2" />
@@ -29,7 +29,7 @@ export default function MentorsSection({ members }: { members: Member[] }) {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-center mb-24 relative z-10"
+                className="text-center mb-8 relative z-10"
             >
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-yellow-500/20 bg-yellow-500/5 text-yellow-400 text-sm font-semibold uppercase tracking-widest mb-6 backdrop-blur-md">
                     <GraduationCap className="w-4 h-4" />
@@ -54,23 +54,23 @@ export default function MentorsSection({ members }: { members: Member[] }) {
                         {/* Holographic Base */}
                         <div className="absolute -inset-4 bg-gradient-to-b from-yellow-500/10 to-transparent rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
 
-                        <div className="relative w-[300px] h-[400px] bg-gray-900/40 backdrop-blur-md border border-white/10 rounded-[2rem] overflow-hidden group-hover:border-yellow-500/30 transition-colors duration-500 flex flex-col items-center p-8">
-                            {/* Image Circle with Rotating Rings */}
-                            <div className="relative w-40 h-40 mb-8">
-                                <div className="absolute inset-0 rounded-full border border-yellow-500/20 group-hover:scale-110 transition-transform duration-700" />
-                                <div className="absolute -inset-2 rounded-full border border-dashed border-yellow-500/20 animate-spin-slow" />
-
-                                <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-white/10 group-hover:border-yellow-500/50 transition-colors shadow-2xl">
+                        <div className="relative w-[300px] h-[520px] bg-gray-900/40 backdrop-blur-md border border-white/10 rounded-[2rem] overflow-hidden group-hover:border-yellow-500/30 transition-colors duration-500 flex flex-col items-center p-6">
+                            {/* Image Container with Colorful Glow */}
+                            <div className="relative w-full h-64 mb-6">
+                                {/* Colorful glow behind image */}
+                                <div className="absolute inset-0 bg-gradient-to-tr from-yellow-400 via-amber-500 to-orange-500 rounded-2xl blur-md opacity-20 group-hover:opacity-60 transition-opacity duration-500 scale-105" />
+                                
+                                <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 group-hover:border-yellow-500/50 transition-colors shadow-2xl bg-gray-800">
                                     {member.cloudinaryUrl ? (
                                         <Image
                                             src={member.cloudinaryUrl}
                                             alt={member.name}
                                             fill
                                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
                                         />
                                     ) : (
-                                        <div className="w-full h-full bg-gray-800 flex items-center justify-center text-4xl text-yellow-500">
+                                        <div className="w-full h-full flex items-center justify-center text-5xl text-yellow-500 font-bold">
                                             {member.name.charAt(0)}
                                         </div>
                                     )}
@@ -110,15 +110,7 @@ export default function MentorsSection({ members }: { members: Member[] }) {
                 ))}
             </div>
 
-            <style jsx>{`
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        .animate-spin-slow {
-          animation: spin-slow 20s linear infinite;
-        }
-      `}</style>
+
         </div>
     );
 }

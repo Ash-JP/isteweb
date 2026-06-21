@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import TeamPresenter from "@/components/TeamPresenter";
 import { Users, Award, Target, Sparkles } from "lucide-react";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: 'Our Team',
   description: 'Meet the passionate individuals driving innovation and excellence at ISTE CEAL.',
@@ -45,7 +47,7 @@ export default async function TeamPage() {
       <div className="h-20"></div>
 
       {/* Hero Section */}
-      <section className="relative section-padding pb-12 bg-transparent overflow-hidden">
+      <section className="relative pt-12 pb-0 bg-transparent overflow-hidden">
         {/* Gear Background */}
         <div className="absolute top-20 right-20 opacity-5 pointer-events-none">
           <svg className="w-64 h-64 gear-bg" viewBox="0 0 100 100" fill="#fff">
@@ -72,7 +74,7 @@ export default async function TeamPage() {
       </section>
 
       {/* Team Presenter (Infinity Scroll & Filtering) */}
-      <section className="section-padding pt-0">
+      <section className="pb-20">
         <div className="container-centered">
           <TeamPresenter members={members} />
         </div>
