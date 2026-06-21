@@ -12,8 +12,19 @@ export default function KeystaticAuth({ children, requiredPassword }: { children
     // Suppress non-fatal Keystar UI / React 19 hydration warnings in the console
     const originalConsoleError = console.error;
     console.error = (...args) => {
-      if (typeof args[0] === 'string' && args[0].includes('BreadcrumbItem')) return;
-      if (typeof args[0] === 'string' && args[0].includes('setProp')) return;
+      let msg = '';
+      if (typeof args[0] === 'string') msg = args[0];
+      else if (args[0] instanceof Error) msg = args[0].message;
+
+      if (
+        msg.includes('BreadcrumbItem') || 
+        msg.includes('setProp') || 
+        (msg.includes('React does not recognize the') && msg.includes('prop on a DOM element')) ||
+        msg.includes('Unknown event handler property') ||
+        msg.includes('An empty string ("") was passed to the href attribute')
+      ) {
+        return;
+      }
       originalConsoleError(...args);
     };
 

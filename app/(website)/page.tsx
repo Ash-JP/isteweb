@@ -16,36 +16,40 @@ export const metadata: Metadata = {
 import { reader } from "@/lib/keystatic";
 
 async function getCountdownEvent() {
-  const homepageSettings = await reader.singletons.homepage.read();
-  
-  if (homepageSettings?.countdownEventSlug) {
-    const event = await reader.collections.events.read(homepageSettings.countdownEventSlug);
-    if (event) {
+  try {
+    const homepageSettings = await reader.singletons.homepage.read();
+    
+    if (homepageSettings?.countdownEventSlug) {
+      const event = await reader.collections.events.read(homepageSettings.countdownEventSlug);
+      if (event) {
+        return {
+          title: event.title,
+          description: event.description,
+          date: event.date || "",
+          slug: { current: homepageSettings.countdownEventSlug }
+        };
+      }
+    }
+
+    const allEvents = await reader.collections.events.all();
+    const upcomingEvents = allEvents.filter(e => e.entry.status === 'upcoming');
+    
+    upcomingEvents.sort((a, b) => {
+      if (!a.entry.date || !b.entry.date) return 0;
+      return new Date(a.entry.date).getTime() - new Date(b.entry.date).getTime();
+    });
+
+    if (upcomingEvents.length > 0) {
+      const e = upcomingEvents[0];
       return {
-        title: event.title,
-        description: event.description,
-        date: event.date || "",
-        slug: { current: homepageSettings.countdownEventSlug }
+        title: e.entry.title,
+        description: e.entry.description,
+        date: e.entry.date || "",
+        slug: { current: e.slug }
       };
     }
-  }
-
-  const allEvents = await reader.collections.events.all();
-  const upcomingEvents = allEvents.filter(e => e.entry.status === 'upcoming');
-  
-  upcomingEvents.sort((a, b) => {
-    if (!a.entry.date || !b.entry.date) return 0;
-    return new Date(a.entry.date).getTime() - new Date(b.entry.date).getTime();
-  });
-
-  if (upcomingEvents.length > 0) {
-    const e = upcomingEvents[0];
-    return {
-      title: e.entry.title,
-      description: e.entry.description,
-      date: e.entry.date || "",
-      slug: { current: e.slug }
-    };
+  } catch (error) {
+    console.error("Failed to fetch homepage data from Keystatic:", error);
   }
   
   return undefined;

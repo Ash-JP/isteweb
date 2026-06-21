@@ -6,20 +6,30 @@ import CurvedTimeline from "@/components/CurvedTimeline";
 export const metadata: Metadata = {
   title: 'Events',
   description: 'Explore our history of workshops, hackathons, seminars, and tech events.',
+  openGraph: {
+    title: 'Events | ISTE CEAL',
+    description: 'Explore our history of workshops, hackathons, seminars, and tech events.',
+    type: 'website',
+  },
 };
 
 import { reader } from "@/lib/keystatic";
 
 async function getEvents() {
-  const events = await reader.collections.events.all();
-  return events.map((event) => ({
-    _id: event.slug,
-    slug: event.slug,
-    ...event.entry,
-  })).sort((a, b) => {
-    if (!a.date || !b.date) return 0;
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
+  try {
+    const events = await reader.collections.events.all();
+    return events.map((event) => ({
+      _id: event.slug,
+      slug: event.slug,
+      ...event.entry,
+    })).sort((a, b) => {
+      if (!a.date || !b.date) return 0;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+  } catch (error) {
+    console.error("Failed to fetch events from Keystatic:", error);
+    return [];
+  }
 }
 
 export default async function EventsPage() {

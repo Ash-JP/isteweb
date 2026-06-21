@@ -22,9 +22,12 @@ export const metadata: Metadata = {
     template: '%s | ISTE CEAL',
   },
   description: 'Official website of ISTE CEAL Student Chapter - Empowering technical excellence through innovation and collaboration. Join us for hackathons, workshops, and tech events.',
-  keywords: ['ISTE', 'CEAL', 'Student Chapter', 'Tech Events', 'Hackathons', 'Workshops', 'Coding', 'Engineering'],
+  keywords: ['ISTE', 'CEAL', 'Student Chapter', 'Tech Events', 'Hackathons', 'Workshops', 'Coding', 'Engineering', 'Professional Development', 'Networking'],
   authors: [{ name: 'ISTE CEAL Web Team' }],
   creator: 'ISTE CEAL',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_IN',

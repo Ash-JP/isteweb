@@ -58,10 +58,10 @@ export default function AboutSection() {
                         {/* Content */}
                         <div className="space-y-6 text-center">
                             <p className="text-xl text-gray-300 leading-relaxed">
-                                The <strong className="text-sky-400">Indian Society for Technical Education (ISTE)</strong> CEAL Student Chapter is a vibrant community of engineering students dedicated to fostering technical excellence and innovation.
+                                The <strong className="text-sky-400">Indian Society for Technical Education (ISTE)</strong> CEAL Student Chapter is a premier student organization committed to driving technological advancement and professional development.
                             </p>
                             <p className="text-lg text-gray-400 leading-relaxed">
-                                We provide a platform for students to enhance their technical skills through workshops, competitions, and collaborative projects. Our mission is to bridge the gap between academic learning and industry requirements.
+                                We bridge the gap between academic theory and industry practice. Through specialized workshops, intensive hackathons, and collaborative engineering projects, we empower students to transform their theoretical knowledge into tangible, real-world solutions.
                             </p>
                         </div>
 

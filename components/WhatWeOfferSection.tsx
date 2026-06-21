@@ -28,7 +28,7 @@ export default function WhatWeOfferSection() {
         {
             icon: <Code2 className="w-12 h-12" />,
             title: "Technical Workshops",
-            description: "Hands-on sessions covering latest technologies, programming languages, and software development practices",
+            description: "Immersive, hands-on sessions focused on modern frameworks, emerging technologies, and industry-standard software development practices",
             gradient: "from-blue-500 to-sky-500",
             borderColor: "border-blue-500/30",
             iconBg: "bg-blue-500/20",
@@ -37,7 +37,7 @@ export default function WhatWeOfferSection() {
         {
             icon: <Trophy className="w-12 h-12" />,
             title: "Hackathons",
-            description: "24-48 hour coding marathons where teams build innovative solutions to real-world problems",
+            description: "High-intensity technical challenges where collaborative teams engineer innovative solutions to complex, real-world problems",
             gradient: "from-purple-500 to-pink-500",
             borderColor: "border-purple-500/30",
             iconBg: "bg-purple-500/20",
@@ -46,7 +46,7 @@ export default function WhatWeOfferSection() {
         {
             icon: <Users className="w-12 h-12" />,
             title: "Networking Events",
-            description: "Connect with industry professionals, alumni, and fellow students to expand your network",
+            description: "Strategic opportunities to engage with industry professionals, distinguished alumni, and peer innovators to accelerate your career trajectory",
             gradient: "from-green-500 to-emerald-500",
             borderColor: "border-green-500/30",
             iconBg: "bg-green-500/20",
@@ -55,7 +55,7 @@ export default function WhatWeOfferSection() {
         {
             icon: <Award className="w-12 h-12" />,
             title: "Project Showcase",
-            description: "Platform to present your innovative projects and get feedback from experts and peers",
+            description: "A dedicated platform to present your technical achievements, secure expert feedback, and gain recognition for your engineering projects",
             gradient: "from-orange-500 to-red-500",
             borderColor: "border-orange-500/30",
             iconBg: "bg-orange-500/20",

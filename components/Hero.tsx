@@ -99,7 +99,7 @@ export default function Hero() {
 
             {/* Subtitle - Compact */}
             <p className="text-base md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed px-4">
-              Empowering students through technology, innovation, and collaborative learning
+              Cultivating technical excellence and future-ready engineering leaders through collaborative innovation.
             </p>
           </div>
 

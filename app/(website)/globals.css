@@ -29,6 +29,8 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(10 30 94) rgb(245 245 245);
   }
 
   /* Scrollbar Styling */

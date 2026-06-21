@@ -6,21 +6,31 @@ import { Users, Award, Target, Sparkles } from "lucide-react";
 export const metadata: Metadata = {
   title: 'Our Team',
   description: 'Meet the passionate individuals driving innovation and excellence at ISTE CEAL.',
+  openGraph: {
+    title: 'Our Team | ISTE CEAL',
+    description: 'Meet the passionate individuals driving innovation and excellence at ISTE CEAL.',
+    type: 'website',
+  },
 };
 
 import { reader } from "@/lib/keystatic";
 
 async function getTeam() {
-  const execom = await reader.collections.execom.all();
-  return execom.map((member) => ({
-    _id: member.slug,
-    slug: member.slug,
-    ...member.entry,
-    linkedin: member.entry.linkedin || undefined,
-    github: member.entry.github || undefined,
-    instagram: member.entry.instagram || undefined,
-    cloudinaryUrl: member.entry.cloudinaryUrl || undefined,
-  }));
+  try {
+    const execom = await reader.collections.execom.all();
+    return execom.map((member) => ({
+      _id: member.slug,
+      slug: member.slug,
+      ...member.entry,
+      linkedin: member.entry.linkedin || undefined,
+      github: member.entry.github || undefined,
+      instagram: member.entry.instagram || undefined,
+      cloudinaryUrl: member.entry.cloudinaryUrl || undefined,
+    }));
+  } catch (error) {
+    console.error("Failed to fetch team from Keystatic:", error);
+    return [];
+  }
 }
 
 export default async function TeamPage() {

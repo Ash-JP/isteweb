@@ -99,7 +99,7 @@ export default function MentorsSection({ members }: { members: Member[] }) {
                                         </a>
                                     )}
                                     {member.email && (
-                                        <a href={`mailto:${member.email}`} className="p-2 rounded-full bg-white/5 hover:bg-yellow-500 hover:text-black text-gray-400 transition-all hover:scale-110">
+                                        <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${member.email}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 hover:bg-yellow-500 hover:text-black text-gray-400 transition-all hover:scale-110">
                                             <Mail size={18} />
                                         </a>
                                     )}

@@ -21,6 +21,8 @@ interface Member {
     github?: string;
 }
 
+import { hierarchyOrder } from "@/lib/constants";
+
 export default function TeamPresenter({ members }: { members: Member[] }) {
     // 1. Get Unique Years
     const years = useMemo(() => Array.from(new Set(members.map(m => m.year))).sort().reverse(), [members]);
@@ -33,13 +35,6 @@ export default function TeamPresenter({ members }: { members: Member[] }) {
     const advisors = currentYearMembers.filter(m => ["faculty-advisor", "mentor"].includes(m.role.toLowerCase()));
 
     // 4. Hierarchical Sort for the Main Loop
-    const hierarchyOrder = [
-        "chairperson", "vice-chairperson",
-        "secretary", "vice-secretary", "joint-secretary", "treasurer",
-        "tech-lead", "media-lead", "design-lead", "event-coordinator",
-        "content-writer", "documentation-team", "membership-developer", "community-rep",
-        "volunteer", "member"
-    ];
 
     const mainTeam = currentYearMembers
         .filter(m => !["faculty-advisor", "mentor"].includes(m.role.toLowerCase()))
@@ -56,6 +51,7 @@ export default function TeamPresenter({ members }: { members: Member[] }) {
             <div className="flex justify-center mb-16 z-50 relative">
                 <div className="relative inline-block">
                     <select
+                        aria-label="Filter team by academic year"
                         value={selectedYear}
                         onChange={(e) => setSelectedYear(e.target.value)}
                         className="appearance-none bg-black/40 border border-white/10 text-white px-8 py-3 rounded-full font-medium focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all duration-300 cursor-pointer shadow-lg shadow-black/50 hover:bg-white/5 pr-12"

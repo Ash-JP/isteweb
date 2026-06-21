@@ -42,14 +42,16 @@ export default function HorizontalCarousel({ members }: { members: Member[] }) {
         rotation.set(-currentIndex * theta);
     }, [currentIndex, theta, rotation]);
 
+    const shouldReduceMotion = useReducedMotion();
+
     // Auto-play
     useEffect(() => {
-        if (isHovering) return;
+        if (isHovering || shouldReduceMotion) return;
         const interval = setInterval(() => {
             setCurrentIndex((prev) => prev + 1);
         }, 4000);
         return () => clearInterval(interval);
-    }, [isHovering, members.length]);
+    }, [isHovering, members.length, shouldReduceMotion]);
 
     const handleDragEnd = (_: any, info: PanInfo) => {
         const swipeThreshold = 50;
@@ -189,7 +191,7 @@ export default function HorizontalCarousel({ members }: { members: Member[] }) {
                                             {member.linkedin ? <SocialBtn href={member.linkedin} icon={Linkedin} active={isActive} /> : null}
                                             {member.github ? <SocialBtn href={member.github} icon={Github} active={isActive} /> : null}
                                             {member.instagram ? <SocialBtn href={member.instagram} icon={Instagram} active={isActive} /> : null}
-                                            {member.email ? <SocialBtn href={`mailto:${member.email}`} icon={Mail} active={isActive} /> : null}
+                                            {member.email ? <SocialBtn href={`https://mail.google.com/mail/?view=cm&fs=1&to=${member.email}`} icon={Mail} active={isActive} /> : null}
                                         </div>
                                     </div>
                                 </div>
@@ -203,12 +205,13 @@ export default function HorizontalCarousel({ members }: { members: Member[] }) {
 }
 
 const SocialBtn = ({ href, icon: Icon, active }: any) => {
-    const isMail = href.startsWith('mailto:');
+    const isMail = href.startsWith('mailto:') || href.includes('mail.google.com');
     return (
         <a
             href={href}
-            target={isMail ? "_self" : "_blank"}
-            rel={isMail ? undefined : "noopener noreferrer"}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
             className={`p-2.5 rounded-xl transition-all duration-300 ${active ? 'bg-gray-900 text-white shadow-lg hover:scale-110 hover:bg-sky-500' : 'bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-900'}`}
         >
             <Icon size={18} />

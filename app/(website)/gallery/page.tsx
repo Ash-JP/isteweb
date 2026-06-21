@@ -7,17 +7,27 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: 'Gallery',
   description: 'Moments captured at ISTE CEAL events and hackathons.',
+  openGraph: {
+    title: 'Gallery | ISTE CEAL',
+    description: 'Moments captured at ISTE CEAL events and hackathons.',
+    type: 'website',
+  },
 };
 
 export default async function GalleryPage() {
-    const rawItems = await reader.collections.gallery.all();
-    const items = rawItems.map(item => ({
-        _id: item.slug,
-        ...item.entry
-    })).sort((a, b) => {
-        if (!a.date || !b.date) return 0;
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
+    let items: any[] = [];
+    try {
+        const rawItems = await reader.collections.gallery.all();
+        items = rawItems.map(item => ({
+            _id: item.slug,
+            ...item.entry
+        })).sort((a, b) => {
+            if (!a.date || !b.date) return 0;
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+        });
+    } catch (error) {
+        console.error("Failed to fetch gallery items from Keystatic:", error);
+    }
 
     return (
         <GalleryGrid items={items} />
