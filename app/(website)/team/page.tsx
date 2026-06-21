@@ -38,6 +38,7 @@ async function getTeam() {
 
 export default async function TeamPage() {
   const members = await getTeam();
+  console.log(`Fetched ${members.length} team members from Keystatic.`);
 
   // (Optional) Get current year dynamically or just pass all members to TeamPresenter
   // TeamPresenter handles year filtering now.

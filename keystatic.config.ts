@@ -15,7 +15,6 @@ export default config({
   ui: {
     brand: { 
       name: 'ISTE CEAL Admin',
-      href: '/keystatic'
     },
   },
   storage: isDev 
