@@ -6,8 +6,6 @@ const CurvedTimeline = dynamic(() => import("@/components/CurvedTimeline"));
 import Starfield from "@/components/Starfield";
 import JourneyHeader from "@/components/JourneyHeader";
 
-export const revalidate = 60;
-
 export const metadata: Metadata = {
   title: 'Events',
   description: 'Explore our history of workshops, hackathons, seminars, and tech events.',

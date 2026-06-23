@@ -4,8 +4,6 @@ import { reader } from '@/lib/keystatic';
 
 const GalleryGrid = dynamic(() => import("@/components/GalleryGrid"));
 
-export const revalidate = 60;
-
 export const metadata: Metadata = {
   title: 'Gallery',
   description: 'Moments captured at ISTE CEAL events and hackathons.',

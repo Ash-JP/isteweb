@@ -5,8 +5,6 @@ const TeamPresenter = dynamic(() => import("@/components/TeamPresenter"));
 import TeamHero from "@/components/TeamHero";
 import { Users, Award, Target, Sparkles } from "lucide-react";
 
-export const revalidate = 60;
-
 export const metadata: Metadata = {
   title: 'Our Team',
   description: 'Meet the passionate individuals driving innovation and excellence at ISTE CEAL.',
