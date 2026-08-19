@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Globe,
   Instagram,
@@ -16,11 +16,8 @@ import {
   MessageCircle,
   Download,
   ExternalLink,
-  Share2,
   Copy,
   Check,
-  Settings,
-  Sparkles,
   ShieldCheck,
   ArrowUpRight
 } from 'lucide-react';
@@ -40,7 +37,6 @@ interface LinktreeFeedProps {
 
 export default function LinktreeFeed({ items }: LinktreeFeedProps) {
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
-  const [showShareToast, setShowShareToast] = useState(false);
 
   const renderIcon = (iconName: string) => {
     const iconProps = { className: "w-6 h-6 transition-transform duration-300 group-hover:scale-110" };
@@ -83,69 +79,8 @@ export default function LinktreeFeed({ items }: LinktreeFeedProps) {
     setTimeout(() => setCopiedSlug(null), 2000);
   };
 
-  const handleSharePage = async () => {
-    const pageUrl = window.location.href;
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'ISTE CEAL - Links',
-          text: 'Check out official links from ISTE CEAL Student Chapter!',
-          url: pageUrl,
-        });
-      } catch (err) {
-        console.error('Share error:', err);
-      }
-    } else {
-      navigator.clipboard.writeText(pageUrl);
-      setShowShareToast(true);
-      setTimeout(() => setShowShareToast(false), 2500);
-    }
-  };
-
   return (
     <div className="w-full max-w-xl mx-auto px-4 py-8 relative z-10">
-      {/* Toast Notification */}
-      <AnimatePresence>
-        {showShareToast && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed top-24 left-1/2 -translate-x-1/2 z-[10000] bg-sky-500 text-white font-medium text-sm px-6 py-3 rounded-xl shadow-2xl backdrop-blur-md flex items-center gap-2 border border-sky-400/50"
-          >
-            <Check className="w-4 h-4" />
-            Link copied to clipboard!
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Admin Quick Bar */}
-      <div className="flex items-center justify-between mb-8 p-3 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg">
-        <div className="flex items-center gap-2 text-xs font-semibold text-sky-300 px-2">
-          <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
-          <span>ISTE CEAL Links</span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleSharePage}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-medium border border-white/20 transition-all duration-300 hover:scale-105 active:scale-95"
-            title="Share page"
-          >
-            <Share2 className="w-3.5 h-3.5" />
-            <span>Share</span>
-          </button>
-
-          <Link
-            href="/keystatic/collection/linktree"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
-            title="Open Admin Panel to add or remove links"
-          >
-            <Settings className="w-3.5 h-3.5" />
-            <span>Manage Links</span>
-          </Link>
-        </div>
-      </div>
 
       {/* Profile Header */}
       <motion.div
