@@ -12,6 +12,7 @@ export default function Footer() {
     { name: 'Events', href: '/events' },
     { name: 'Team', href: '/team' },
     { name: 'Gallery', href: '/gallery' },
+    { name: 'Linktree', href: '/links' },
     { name: 'Join', href: '/join' },
   ];
 

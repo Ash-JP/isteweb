@@ -117,6 +117,36 @@ export default config({
         date: fields.date({ label: 'Date Taken' }),
       },
     }),
+    linktree: collection({
+      label: 'Link Tree',
+      slugField: 'title',
+      path: 'src/content/linktree/*',
+      format: { data: 'json' },
+      previewUrl: '/links',
+      schema: {
+        title: fields.slug({ name: { label: 'Link Title' } }),
+        url: fields.text({ label: 'Destination URL (e.g. https://...)' }),
+        description: fields.text({ label: 'Short Subtitle / Description (Optional)' }),
+        icon: fields.select({
+          label: 'Icon',
+          options: [
+            { label: 'Globe / Website', value: 'globe' },
+            { label: 'Instagram', value: 'instagram' },
+            { label: 'LinkedIn', value: 'linkedin' },
+            { label: 'GitHub', value: 'github' },
+            { label: 'YouTube', value: 'youtube' },
+            { label: 'Twitter / X', value: 'twitter' },
+            { label: 'Calendar / Event', value: 'calendar' },
+            { label: 'Email / Contact', value: 'mail' },
+            { label: 'WhatsApp / Community', value: 'message-circle' },
+            { label: 'Download / File', value: 'download' },
+            { label: 'External Link', value: 'external-link' },
+          ],
+          defaultValue: 'globe',
+        }),
+        order: fields.integer({ label: 'Display Order Priority (Lower numbers appear first)', defaultValue: 0 }),
+      },
+    }),
   },
   singletons: {
     homepage: singleton({
