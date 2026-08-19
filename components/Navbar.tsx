@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Home, Info, Calendar, Users, ImageIcon, Settings } from 'lucide-react';
+import { Home, Info, Calendar, Users, ImageIcon, Settings, Link2 } from 'lucide-react';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -26,6 +26,7 @@ export default function Navbar() {
     { name: 'Events', href: '/events', icon: Calendar },
     { name: 'Team', href: '/team', icon: Users },
     { name: 'Gallery', href: '/gallery', icon: ImageIcon },
+    { name: 'Links', href: '/links', icon: Link2 },
   ];
 
   const isActive = (href: string) => {
