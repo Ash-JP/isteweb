@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import HorizontalCarousel from "./HorizontalCarousel";
 import Link from "next/link";
 import MentorsSection from "./MentorsSection";
@@ -10,6 +11,7 @@ import MentorsSection from "./MentorsSection";
 
 interface Member {
     _id: string;
+    slug?: string;
     name: string;
     role: string;
     year: string;
@@ -24,9 +26,31 @@ interface Member {
 import { hierarchyOrder } from "@/lib/constants";
 
 export default function TeamPresenter({ members }: { members: Member[] }) {
+    const searchParams = useSearchParams();
+    const targetId = searchParams.get("id");
+
     // 1. Get Unique Years
     const years = useMemo(() => Array.from(new Set(members.map(m => m.year))).sort().reverse(), [members]);
     const [selectedYear, setSelectedYear] = useState(years[0] || "2024-25");
+
+    // Find target member in ALL members list if query param 'id' exists
+    const targetMember = useMemo(() => {
+        if (!targetId) return null;
+        const normalized = targetId.toLowerCase();
+        return members.find(m => 
+            (m._id && m._id.toLowerCase() === normalized) || 
+            (m.slug && m.slug.toLowerCase() === normalized)
+        );
+    }, [members, targetId]);
+
+    // Auto-switch selected year if target member belongs to a different year
+    useEffect(() => {
+        if (targetMember && targetMember.year && targetMember.year !== selectedYear) {
+            setSelectedYear(targetMember.year);
+        }
+    }, [targetMember, selectedYear]);
+
+    const targetSlug = targetMember ? (targetMember.slug || targetMember._id) : null;
 
     // 2. Filter by Year
     const currentYearMembers = useMemo(() => members.filter(m => m.year === selectedYear), [members, selectedYear]);
@@ -72,7 +96,7 @@ export default function TeamPresenter({ members }: { members: Member[] }) {
             </div>
 
             {/* Mentors Section (Distinct) */}
-            {advisors.length > 0 && <MentorsSection members={advisors} />}
+            {advisors.length > 0 && <MentorsSection members={advisors} targetSlug={targetSlug} />}
 
             {/* Main Team Infinity Loop */}
             <div className="animate-fade-in-up delay-100 relative mt-16 mb-12">
@@ -83,7 +107,7 @@ export default function TeamPresenter({ members }: { members: Member[] }) {
                 </div>
 
                 {mainTeam.length > 0 ? (
-                    <HorizontalCarousel members={mainTeam} />
+                    <HorizontalCarousel members={mainTeam} targetSlug={targetSlug} />
                 ) : (
                     <div className="text-center py-20 text-gray-500">
                         No members found for this year.

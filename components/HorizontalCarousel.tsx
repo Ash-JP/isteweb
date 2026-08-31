@@ -8,6 +8,7 @@ import { Linkedin, Instagram, Mail, Github, ChevronLeft, ChevronRight } from "lu
 
 interface Member {
     _id: string;
+    slug?: string;
     name: string;
     role: string;
     year: string;
@@ -23,7 +24,12 @@ interface Member {
 const CARD_WIDTH = 300;
 const GAP = 25;
 
-export default function HorizontalCarousel({ members }: { members: Member[] }) {
+interface HorizontalCarouselProps {
+    members: Member[];
+    targetSlug?: string | null;
+}
+
+export default function HorizontalCarousel({ members, targetSlug }: HorizontalCarouselProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const [isHovering, setIsHovering] = useState(false);
@@ -41,6 +47,23 @@ export default function HorizontalCarousel({ members }: { members: Member[] }) {
     useEffect(() => {
         rotation.set(-currentIndex * theta);
     }, [currentIndex, theta, rotation]);
+
+    // Handle target slug deep link
+    useEffect(() => {
+        if (!targetSlug || members.length === 0) return;
+        const normalized = targetSlug.toLowerCase();
+        const index = members.findIndex(m => 
+            (m._id && m._id.toLowerCase() === normalized) ||
+            (m.slug && m.slug.toLowerCase() === normalized)
+        );
+        if (index !== -1) {
+            setCurrentIndex(index);
+            const timer = setTimeout(() => {
+                containerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [targetSlug, members]);
 
     const shouldReduceMotion = useReducedMotion();
 
