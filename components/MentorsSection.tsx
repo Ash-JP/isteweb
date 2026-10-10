@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Linkedin, Mail, GraduationCap } from "lucide-react";
 
 interface Member {
     _id: string;
+    slug?: string;
     name: string;
     role: string;
     cloudinaryUrl?: string | null;
@@ -14,11 +16,33 @@ interface Member {
     email?: string;
 }
 
-export default function MentorsSection({ members }: { members: Member[] }) {
+interface MentorsSectionProps {
+    members: Member[];
+    targetSlug?: string | null;
+}
+
+export default function MentorsSection({ members, targetSlug }: MentorsSectionProps) {
+    const sectionRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!targetSlug || members.length === 0) return;
+        const normalized = targetSlug.toLowerCase();
+        const isMentorTargeted = members.some(m => 
+            (m._id && m._id.toLowerCase() === normalized) ||
+            (m.slug && m.slug.toLowerCase() === normalized)
+        );
+        if (isMentorTargeted) {
+            const timer = setTimeout(() => {
+                sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [targetSlug, members]);
+
     if (members.length === 0) return null;
 
     return (
-        <div className="relative pt-0 pb-12 mb-8">
+        <div ref={sectionRef} className="relative pt-0 pb-12 mb-8">
             {/* Background Ambience */}
             <div className="absolute inset-0 flex justify-center overflow-hidden pointer-events-none">
                 <div className="w-[800px] h-[500px] bg-gold-500/5 rounded-full blur-[120px] -translate-y-1/2" />
@@ -41,73 +65,86 @@ export default function MentorsSection({ members }: { members: Member[] }) {
             </motion.div>
 
             <div className="flex flex-wrap justify-center gap-16 px-4 max-w-7xl mx-auto relative z-10">
-                {members.map((member, index) => (
-                    <motion.div
-                        key={member._id}
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.2, type: "spring", stiffness: 100 }}
-                        whileHover={{ y: -10 }}
-                        className="group relative"
-                    >
-                        {/* Holographic Base */}
-                        <div className="absolute -inset-4 bg-gradient-to-b from-yellow-500/10 to-transparent rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
+                {members.map((member, index) => {
+                    const normalizedTarget = targetSlug?.toLowerCase();
+                    const isTarget = Boolean(
+                        normalizedTarget && (
+                            member._id.toLowerCase() === normalizedTarget ||
+                            (member.slug && member.slug.toLowerCase() === normalizedTarget)
+                        )
+                    );
 
-                        <div className="relative w-[300px] h-[520px] bg-gray-900/40 backdrop-blur-md border border-white/10 rounded-[2rem] overflow-hidden group-hover:border-yellow-500/30 transition-colors duration-500 flex flex-col items-center p-6">
-                            {/* Image Container with Colorful Glow */}
-                            <div className="relative w-full h-64 mb-6">
-                                {/* Colorful glow behind image */}
-                                <div className="absolute inset-0 bg-gradient-to-tr from-yellow-400 via-amber-500 to-orange-500 rounded-2xl blur-md opacity-20 group-hover:opacity-60 transition-opacity duration-500 scale-105" />
-                                
-                                <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 group-hover:border-yellow-500/50 transition-colors shadow-2xl bg-gray-800">
-                                    {member.cloudinaryUrl ? (
-                                        <Image
-                                            src={member.cloudinaryUrl}
-                                            alt={member.name}
-                                            fill
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-5xl text-yellow-500 font-bold">
-                                            {member.name.charAt(0)}
-                                        </div>
-                                    )}
+                    return (
+                        <motion.div
+                            key={member._id}
+                            id={`mentor-${member.slug || member._id}`}
+                            initial={{ opacity: 0, y: 50 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.2, type: "spring", stiffness: 100 }}
+                            whileHover={{ y: -10 }}
+                            className="group relative"
+                        >
+                            {/* Holographic Base */}
+                            <div className="absolute -inset-4 bg-gradient-to-b from-yellow-500/10 to-transparent rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
+
+                            <div className={`relative w-[300px] h-[520px] bg-gray-900/40 backdrop-blur-md border border-white/10 rounded-[2rem] overflow-hidden group-hover:border-yellow-500/30 transition-all duration-500 flex flex-col items-center p-6 ${
+                                isTarget ? 'ring-4 ring-yellow-400 scale-105 shadow-[0_0_50px_rgba(234,179,8,0.5)] border-yellow-500/80' : ''
+                            }`}>
+                                {/* Image Container with Colorful Glow */}
+                                <div className="relative w-full h-64 mb-6">
+                                    {/* Colorful glow behind image */}
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-yellow-400 via-amber-500 to-orange-500 rounded-2xl blur-md opacity-20 group-hover:opacity-60 transition-opacity duration-500 scale-105" />
+                                    
+                                    <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 group-hover:border-yellow-500/50 transition-colors shadow-2xl bg-gray-800">
+                                        {member.cloudinaryUrl ? (
+                                            <Image
+                                                src={member.cloudinaryUrl}
+                                                alt={member.name}
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-5xl text-yellow-500 font-bold">
+                                                {member.name.charAt(0)}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Info */}
+                                <div className="text-center">
+                                    <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
+                                        {member.name}
+                                    </h3>
+                                    <div className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-6">
+                                        {member.role === 'other' && member.customRole 
+                                            ? member.customRole 
+                                            : member.role.replace("-", " ")}
+                                    </div>
+
+                                    {/* Divider */}
+                                    <div className="w-12 h-0.5 bg-white/10 mx-auto mb-6 group-hover:w-24 group-hover:bg-yellow-500/50 transition-all duration-500" />
+
+                                    {/* Socials */}
+                                    <div className="flex justify-center gap-4">
+                                        {member.linkedin && (
+                                            <a href={member.linkedin} target="_blank" className="p-2 rounded-full bg-white/5 hover:bg-yellow-500 hover:text-black text-gray-400 transition-all hover:scale-110">
+                                                <Linkedin size={18} />
+                                            </a>
+                                        )}
+                                        {member.email && (
+                                            <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${member.email}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 hover:bg-yellow-500 hover:text-black text-gray-400 transition-all hover:scale-110">
+                                                <Mail size={18} />
+                                            </a>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-
-                            {/* Info */}
-                            <div className="text-center">
-                                <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
-                                    {member.name}
-                                </h3>
-                                <div className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-6">
-                                    {member.role === 'other' && member.customRole 
-                                        ? member.customRole 
-                                        : member.role.replace("-", " ")}
-                                </div>
-
-                                {/* Divider */}
-                                <div className="w-12 h-0.5 bg-white/10 mx-auto mb-6 group-hover:w-24 group-hover:bg-yellow-500/50 transition-all duration-500" />
-
-                                {/* Socials */}
-                                <div className="flex justify-center gap-4">
-                                    {member.linkedin && (
-                                        <a href={member.linkedin} target="_blank" className="p-2 rounded-full bg-white/5 hover:bg-yellow-500 hover:text-black text-gray-400 transition-all hover:scale-110">
-                                            <Linkedin size={18} />
-                                        </a>
-                                    )}
-                                    {member.email && (
-                                        <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${member.email}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 hover:bg-yellow-500 hover:text-black text-gray-400 transition-all hover:scale-110">
-                                            <Mail size={18} />
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-                ))}
+                        </motion.div>
+                    );
+                })}
             </div>
 
 

@@ -35,6 +35,8 @@ async function getTeam() {
   }
 }
 
+import { Suspense } from "react";
+
 export default async function TeamPage() {
   const members = await getTeam();
   console.log(`Fetched ${members.length} team members from Keystatic.`);
@@ -53,7 +55,9 @@ export default async function TeamPage() {
       {/* Team Presenter (Infinity Scroll & Filtering) */}
       <section className="pb-20">
         <div className="container-centered">
-          <TeamPresenter members={members} />
+          <Suspense fallback={<div className="text-center py-20 text-white">Loading team...</div>}>
+            <TeamPresenter members={members} />
+          </Suspense>
         </div>
       </section>
       {/* CTA Section */}

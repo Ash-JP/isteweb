@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  outputFileTracingIncludes: {
+    '/**': ['./src/content/**/*'],
+  },
   images: {
     loader: 'custom',
     loaderFile: './cloudinary-loader.js',
