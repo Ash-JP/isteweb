@@ -18,10 +18,24 @@ export default async function GalleryPage() {
     let items: any[] = [];
     try {
         const rawItems = await reader.collections.gallery.all();
-        items = rawItems.map(item => ({
-            _id: item.slug,
-            ...item.entry
-        })).sort((a, b) => {
+        items = rawItems.flatMap(item => {
+            const mainImage = {
+                _id: item.slug + '-main',
+                title: item.entry.title,
+                category: item.entry.category,
+                cloudinaryUrl: item.entry.cloudinaryUrl,
+                date: item.entry.date
+            };
+            const additional = (item.entry.additionalPhotos || []).map((img, idx) => ({
+                _id: item.slug + '-' + idx,
+                title: item.entry.title + ` (${idx + 2})`,
+                category: item.entry.category,
+                cloudinaryUrl: img.cloudinaryUrl,
+                date: item.entry.date
+            }));
+            
+            return [mainImage, ...additional].filter(img => img.cloudinaryUrl);
+        }).sort((a, b) => {
             if (!a.date || !b.date) return 0;
             return new Date(b.date).getTime() - new Date(a.date).getTime();
         });

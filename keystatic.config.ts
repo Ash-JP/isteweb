@@ -100,8 +100,9 @@ export default config({
       slugField: 'title',
       path: 'src/content/gallery/*',
       format: { data: 'json' },
+      previewUrl: '/gallery',
       schema: {
-        title: fields.slug({ name: { label: 'Image Title' } }),
+        title: fields.slug({ name: { label: 'Event / Album Title' } }),
         category: fields.select({
           label: 'Category',
           options: [
@@ -109,11 +110,18 @@ export default config({
             { label: 'Hackathon', value: 'Hackathon' },
             { label: 'Team Building', value: 'Team Building' },
             { label: 'Conference', value: 'Conference' },
+            { label: 'Execom', value: 'Execom' },
             { label: 'Other', value: 'Other' },
           ],
           defaultValue: 'Other'
         }),
-        cloudinaryUrl: fields.text({ label: 'Image (Cloudinary URL)' }),
+        cloudinaryUrl: fields.text({ label: 'Main Image (Cloudinary URL)' }),
+        additionalPhotos: fields.array(
+          fields.object({
+            cloudinaryUrl: fields.text({ label: 'Image URL' })
+          }),
+          { label: 'Additional Photos (Event Batch)' }
+        ),
         date: fields.date({ label: 'Date Taken' }),
       },
     }),
@@ -123,6 +131,7 @@ export default config({
       label: 'Homepage Settings',
       path: 'src/content/homepage',
       format: { data: 'json' },
+      previewUrl: '/',
       schema: {
         countdownEventSlug: fields.text({ label: 'Countdown Event Slug' }),
       },

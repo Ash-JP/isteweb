@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, MapPin, ArrowRight, Clock } from "lucide-react";
 import Link from "next/link";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface TimelineModalProps {
     event: any;
@@ -12,7 +13,17 @@ interface TimelineModalProps {
     onClose: () => void;
 }
 
-export default function TimelineModal({ event, isOpen, onClose }: TimelineModalProps) {
+export default function TimelineModal({ event: incomingEvent, isOpen, onClose }: TimelineModalProps) {
+    const [mounted, setMounted] = useState(false);
+    const [savedEvent, setSavedEvent] = useState(incomingEvent);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (incomingEvent) setSavedEvent(incomingEvent);
+    }, [incomingEvent]);
 
     // Lock body scroll when modal is open
     useEffect(() => {
@@ -26,12 +37,15 @@ export default function TimelineModal({ event, isOpen, onClose }: TimelineModalP
         };
     }, [isOpen]);
 
+    if (!mounted) return null;
+
+    const event = isOpen ? incomingEvent : savedEvent;
     if (!event) return null;
 
-    return (
+    const modalContent = (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8">
 
                     {/* Backdrop */}
                     <motion.div
@@ -48,7 +62,7 @@ export default function TimelineModal({ event, isOpen, onClose }: TimelineModalP
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-3xl bg-[#0B1120] border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+                        className="relative w-full max-w-5xl bg-[#0B1120] border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
                     >
                         {/* Close Button */}
                         <button
@@ -151,4 +165,6 @@ export default function TimelineModal({ event, isOpen, onClose }: TimelineModalP
             )}
         </AnimatePresence>
     );
+
+    return createPortal(modalContent, document.body);
 }
